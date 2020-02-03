@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-03 00:19:39
+@LastEditTime : 2020-02-03 10:10:22
 '''
 
 from configobj import ConfigObj
@@ -32,44 +32,74 @@ class claMongoDB(object):
         # dbMongo = self.dbClient[self.strDBName]
         # dbMongo.authenticate(self.strDBUser, self.strDBPW)
 
-    def LoadRandomLimit(self, strTbCfgSet, dictFilter, intLimit):
+    # def LoadRandomLimit(self, strTbCfgSet, dictFilter, intLimit):
+    #     dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
+    #     dbMongo.authenticate(
+    #         self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
+    #     return dbMongo[self.objConfig[strTbCfgSet]['table']].aggregate([{'$match': dictFilter}, {'$sample': {'size': intLimit}}])
+
+    # def InsertSome(self, strTbCfgSet, arrInsert):
+    #     dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
+    #     dbMongo.authenticate(
+    #         self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
+    #     dbMongo[self.objConfig[strTbCfgSet]['table']].insert_many(arrInsert)
+
+    # def CheckOneExisit(self, strTbCfgSet, dictFilter):
+    #     dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
+    #     dbMongo.authenticate(
+    #         self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
+    #     eleData = dbMongo[self.objConfig[strTbCfgSet]
+    #                       ['table']].find_one(dictFilter)
+    #     if eleData is None:
+    #         return False
+    #     else:
+    #         return True
+
+    # def LoadAllData(self, strTbCfgSet):
+    #     dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
+    #     dbMongo.authenticate(
+    #         self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
+    #     return dbMongo[self.objConfig[strTbCfgSet]['table']].find()
+
+    # def UpdateOneData(self, strTbCfgSet, dictFilter, dictValue):
+    #     dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
+    #     dbMongo.authenticate(
+    #         self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
+    #     dbMongo[self.objConfig[strTbCfgSet]['table']].update_one(
+    #         dictFilter, {"$set": dictValue})
+
+    # def DeleteSome(self, strTbCfgSet, dictFilter):
+    #     dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
+    #     dbMongo.authenticate(
+    #         self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
+    #     return dbMongo[self.objConfig[strTbCfgSet]['table']].delete_many(dictFilter)
+
+    # 这个是缩短的
+    def GetTable(self, strTbCfgSet):
         dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
         dbMongo.authenticate(
             self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
-        return dbMongo[self.objConfig[strTbCfgSet]['table']].aggregate([{'$match': dictFilter}, {'$sample': {'size': intLimit}}])
+        return dbMongo[self.objConfig[strTbCfgSet]['table']]
+
+    def LoadRandomLimit(self, strTbCfgSet, dictFilter, intLimit):
+        return self.GetTable(strTbCfgSet).aggregate([{'$match': dictFilter}, {'$sample': {'size': intLimit}}])
 
     def InsertSome(self, strTbCfgSet, arrInsert):
-        dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
-        dbMongo.authenticate(
-            self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
-        dbMongo[self.objConfig[strTbCfgSet]['table']].insert_many(arrInsert)
+        self.GetTable(strTbCfgSet).insert_many(arrInsert)
 
     def CheckOneExisit(self, strTbCfgSet, dictFilter):
-        dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
-        dbMongo.authenticate(
-            self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
-        eleData = dbMongo[self.objConfig[strTbCfgSet]
-                          ['table']].find_one(dictFilter)
+        eleData = self.GetTable(strTbCfgSet).find_one(dictFilter)
         if eleData is None:
             return False
         else:
             return True
 
     def LoadAllData(self, strTbCfgSet):
-        dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
-        dbMongo.authenticate(
-            self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
-        return dbMongo[self.objConfig[strTbCfgSet]['table']].find()
+        return self.GetTable(strTbCfgSet).find()
 
     def UpdateOneData(self, strTbCfgSet, dictFilter, dictValue):
-        dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
-        dbMongo.authenticate(
-            self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
-        dbMongo[self.objConfig[strTbCfgSet]['table']].update_one(
+        self.GetTable(strTbCfgSet).update_one(
             dictFilter, {"$set": dictValue})
 
     def DeleteSome(self, strTbCfgSet, dictFilter):
-        dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
-        dbMongo.authenticate(
-            self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
-        return dbMongo[self.objConfig[strTbCfgSet]['table']].delete_many(dictFilter)
+        return self.GetTable(strTbCfgSet).delete_many(dictFilter)
