@@ -132,3 +132,4 @@ dmypy.json
 # VSCode and support
 .vscode/
 Support/
+logs/

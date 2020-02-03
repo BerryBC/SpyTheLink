@@ -3,10 +3,9 @@
 @Author: BerryBC
 @Date: 2020-02-02 14:24:17
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-02 18:42:43
+@LastEditTime : 2020-02-03 13:02:37
 '''
 import time
-from dateutil import parser
 
 
 class claAddPage(object):
