@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-04 15:58:29
+@LastEditTime : 2020-02-05 00:31:10
 '''
 
 from configobj import ConfigObj
@@ -110,3 +110,9 @@ class claMongoDB(object):
 
     def InsertOne(self, strTbCfgSet, dictInsert):
         self.GetTable(strTbCfgSet).insert_one(dictInsert)
+
+    def LoadOne(self, strTbCfgSet, dictFilter):
+        return self.GetTable(strTbCfgSet).find_one(dictInsert)
+
+    def LoadSome(self, strTbCfgSet, dictFilter):
+        return self.GetTable(strTbCfgSet).find(dictFilter)
