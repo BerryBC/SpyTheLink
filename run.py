@@ -1,9 +1,10 @@
 '''
 @Descripttion: 捉取整个网络的所有页面链接下来！
 @Author: BerryBC
+@Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-03 00:56:05
+@LastEditTime : 2020-02-04 16:18:28
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -62,7 +63,7 @@ def funSpyReusablePage():
     loop.run_until_complete(waittask)
     loop.close()
     threading.Timer(60*intReusableRepeatTime, funSpyReusablePage).start()
-    print(' Reusable End : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+    print(' Reusable end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
 def funSpyNewPage():
@@ -83,7 +84,7 @@ def funSpyNewPage():
     loop.run_until_complete(waittask)
     loop.close()
     threading.Timer(60*intNewRepeatTime, funSpyNewPage).start()
-    print(' New End : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+    print(' New end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
 def funDeleteOldPage():
@@ -91,10 +92,13 @@ def funDeleteOldPage():
     intNow = int(time.time()*1000)
     curDelete = objLinkDB.DeleteSome(
         'pagedb-Crawled', {'t': {'$lt': intNow-intDeleteTime}})
-    print(' Delete ' + str(curDelete.deleted_count) + ' data')
+    print(' Delete URL Number : ' + str(curDelete.deleted_count))
+    curDelete = objLinkDB.DeleteSome(
+        'sampledb', {'t': {'$lt': (intNow-(intDeleteTime)*3)}})
+    print(' Delete Content Number : ' + str(curDelete.deleted_count))
     # print(intNow)
     threading.Timer(60*intDeleteRepeatTime, funDeleteOldPage).start()
-    print(' Delete End : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+    print(' Delete end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
 async def funSpyWeb(eleWeb, inSemaphore):
@@ -128,6 +132,8 @@ async def funSpyWeb(eleWeb, inSemaphore):
                                 aFromWeb = soup.select('a')
                                 for eleA in aFromWeb:
                                     objAddPage.AddToDB(eleA.get('href'))
+                                arrWebP=soup.select('p')
+                                objAddPage.AddPContent(arrWebP)
                                 # print(result)
                             bolRetry = False
                             # print("  After " + str(intTryTime) +

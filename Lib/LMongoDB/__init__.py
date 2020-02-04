@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-03 10:10:22
+@LastEditTime : 2020-02-04 15:58:29
 '''
 
 from configobj import ConfigObj
@@ -103,3 +103,10 @@ class claMongoDB(object):
 
     def DeleteSome(self, strTbCfgSet, dictFilter):
         return self.GetTable(strTbCfgSet).delete_many(dictFilter)
+
+    def InsertOneWithID(self, strTbCfgSet, dictInsert):
+        objIed=self.GetTable(strTbCfgSet).insert_one(dictInsert)
+        return objIed.inserted_id
+
+    def InsertOne(self, strTbCfgSet, dictInsert):
+        self.GetTable(strTbCfgSet).insert_one(dictInsert)
