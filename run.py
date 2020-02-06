@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-06 22:20:10
+@LastEditTime : 2020-02-07 00:05:48
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -143,12 +143,21 @@ async def funSpyWeb(eleWeb, inSemaphore):
 
                 # 添加 JS 渲染方法
                 options= Options()
-                # options.binary_location = "/usr/bin/chromedriver"
-                options.add_argument('--no-sandbox')    #解决DevToolsActivePort文件不存在的报错
-                options.add_argument('--disable-gpu')   #谷歌文档提到需要加上这个属性来规避bug
-                options.add_argument('--hide-scrollbars')   #隐藏滚动条, 应对一些特殊页面
-                options.add_argument('blink-settings=imagesEnabled=false')      #不加载图片, 提升速度
-                options.add_argument('--headless')      #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+                
+                options.add_argument('--no-sandbox')
+                options.add_argument('--disable-gpu')
+                options.add_argument('--hide-scrollbars') 
+                options.add_argument('blink-settings=imagesEnabled=false') 
+                options.add_argument('--headless') 
+                options.add_argument('--incognito')
+                options.add_argument('--ignore-certificate-errors')
+                options.add_argument('--disable-software-rasterizer')
+                options.add_argument('--disable-extensions')
+                options.add_argument('--user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36"')
+                options.add_argument('--window-size=1280x1024')
+                options.add_argument('--start-maximized')
+                options.add_argument('--disable-infobars')
+
                 options.add_argument('--proxy-server='+strProxyToSpy)
                 # options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36' )
                 # browser = webdriver.PhantomJS('/usr/bin/chromedriver',chrome_options = options)
