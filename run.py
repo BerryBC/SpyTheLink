@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-06 20:59:52
+@LastEditTime : 2020-02-06 21:09:52
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -160,7 +160,7 @@ async def funSpyWeb(eleWeb, inSemaphore):
                 browserChorme.get(eleWeb)
 
                 strhtml=browserChorme.page_source
-                if strhtml!='<html><head></head><body></body></html>:'
+                if strhtml!='<html><head></head><body></body></html>':
                     # input=browser.find_element_by_class_name('zu-top-question') 
                     # print(input)
                     soup = BeautifulSoup(strhtml, 'lxml')
