@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-06 20:42:12
+@LastEditTime : 2020-02-06 20:59:52
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -156,11 +156,11 @@ async def funSpyWeb(eleWeb, inSemaphore):
                 # browser = webdriver.Chrome('C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',chrome_options = options)
                 browserChorme.set_page_load_timeout(intRequestTimeout)
                 browserChorme.set_script_timeout(intRequestTimeout)
-                browserChorme.implicitly_wait(intRequestTimeout) 
+                browserChorme.implicitly_wait(intRequestTimeout*3)
                 browserChorme.get(eleWeb)
 
                 strhtml=browserChorme.page_source
-                if strhtml!=<html><head></head><body></body></html>:
+                if strhtml!='<html><head></head><body></body></html>:'
                     # input=browser.find_element_by_class_name('zu-top-question') 
                     # print(input)
                     soup = BeautifulSoup(strhtml, 'lxml')
@@ -172,14 +172,17 @@ async def funSpyWeb(eleWeb, inSemaphore):
                     # print(result)
                     bolRetry = False
                     browserChorme.close()
-                    print("  After " + str(intTryTime) +
-                        " time, success reach " + eleWeb)
+                    # print("  After " + str(intTryTime) +
+                    #     " time, success reach " + eleWeb)
                 else:
+                    browserChorme.close()
                     intTryTime += 1
+                    # print('    Fail ' + str(intTryTime) + ' time')
             except Exception as e:
                 intTryTime += 1
-                print(" Get method error : " + str(e))
-                print('    Fail ' + str(intTryTime) + ' time')
+                browserChorme.close()
+                # print(" Get method error : " + str(e))
+                # print('    Fail ' + str(intTryTime) + ' time')
         # except Exception as e:
         #     print(" Session error : " + str(e))
 
