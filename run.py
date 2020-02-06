@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-07 00:15:21
+@LastEditTime : 2020-02-07 01:04:34
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -96,7 +96,7 @@ def funDeleteOldPage():
         'pagedb-Crawled', {'t': {'$lt': intNow-intDeleteTime}})
     print(' Delete URL Number : ' + str(curDelete.deleted_count))
     curDelete = objLinkDB.DeleteSome(
-        'sampledb', {'t': {'$lt': (intNow-(intDeleteTime)*3)}})
+        'sampledb', {'t': {'$lt': (intNow-(intDeleteTime)*3)},'cf':False})
     print(' Delete Content Number : ' + str(curDelete.deleted_count))
     # print(intNow)
     threading.Timer(60*intDeleteRepeatTime, funDeleteOldPage).start()
