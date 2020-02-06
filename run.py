@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-06 19:39:59
+@LastEditTime : 2020-02-06 20:42:12
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -149,7 +149,7 @@ async def funSpyWeb(eleWeb, inSemaphore):
                 options.add_argument('--hide-scrollbars')   #隐藏滚动条, 应对一些特殊页面
                 options.add_argument('blink-settings=imagesEnabled=false')      #不加载图片, 提升速度
                 options.add_argument('--headless')      #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
-                options.add_argument('–proxy-server='+strProxyToSpy)
+                options.add_argument('--proxy-server='+strProxyToSpy)
                 # options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36' )
                 # browser = webdriver.PhantomJS('/usr/bin/chromedriver',chrome_options = options)
                 browserChorme = webdriver.Chrome('/usr/bin/chromedriver',chrome_options = options)
@@ -160,19 +160,22 @@ async def funSpyWeb(eleWeb, inSemaphore):
                 browserChorme.get(eleWeb)
 
                 strhtml=browserChorme.page_source
-                # input=browser.find_element_by_class_name('zu-top-question') 
-                # print(input)
-                soup = BeautifulSoup(strhtml, 'lxml')
-                aFromWeb = soup.select('a')
-                for eleA in aFromWeb:
-                    objAddPage.AddToDB(eleA.get('href'))
-                arrWebP=soup.select('p')
-                objAddPage.AddPContent(arrWebP)
-                # print(result)
-                bolRetry = False
-                browserChorme.close()
-                print("  After " + str(intTryTime) +
-                      " time, success reach " + eleWeb)
+                if strhtml!=<html><head></head><body></body></html>:
+                    # input=browser.find_element_by_class_name('zu-top-question') 
+                    # print(input)
+                    soup = BeautifulSoup(strhtml, 'lxml')
+                    aFromWeb = soup.select('a')
+                    for eleA in aFromWeb:
+                        objAddPage.AddToDB(eleA.get('href'))
+                    arrWebP=soup.select('p')
+                    objAddPage.AddPContent(arrWebP)
+                    # print(result)
+                    bolRetry = False
+                    browserChorme.close()
+                    print("  After " + str(intTryTime) +
+                        " time, success reach " + eleWeb)
+                else:
+                    intTryTime += 1
             except Exception as e:
                 intTryTime += 1
                 print(" Get method error : " + str(e))
