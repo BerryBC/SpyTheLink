@@ -4,13 +4,15 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-04 16:18:28
+@LastEditTime : 2020-02-06 19:39:59
 '''
 
 from Lib.LMongoDB import claMongoDB
 from Lib.LAddPage import claAddPage
 from configobj import ConfigObj
 from bs4 import BeautifulSoup
+from selenium import webdriver 
+from selenium.webdriver.chrome.options import Options
 import asyncio
 import aiohttp
 import threading
@@ -29,12 +31,12 @@ intDeleteTime = int(objParam['param']['DeleteTime'])
 intReusableRepeatTime = int(objParam['param']['ReusableRepeatTime'])
 intNewRepeatTime = int(objParam['param']['NewRepeatTime'])
 intDeleteRepeatTime = int(objParam['param']['DeleteRepeatTime'])
-dictHeader = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.78 Safari/537.36',
-    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
-    'cache-control': 'no-cache',
-    'Pragma': 'no-cache'}
+# dictHeader = {
+#     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.78 Safari/537.36',
+#     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+#     'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
+#     'cache-control': 'no-cache',
+#     'Pragma': 'no-cache'}
 
 
 def funMain():
@@ -114,36 +116,69 @@ async def funSpyWeb(eleWeb, inSemaphore):
         arrProxy = list(arrProxy)
         intProxyLen = len(arrProxy)
         # print(intProxyLen)
-        try:
-            async with aiohttp.ClientSession() as session:
-                # 判断是否需要重试以及是否所有代理均已用完
-                while (bolRetry and (intTryTime < intProxyLen)):
-                    try:
-                        # 导入代理
-                        strProxyToSpy = "http://" + \
-                            arrProxy[intTryTime]["u"] + \
-                            ":"+arrProxy[intTryTime]["p"]
-                        # print(strProxyToSpy)
-                        # 异步请求网页内容
-                        async with session.get(eleWeb, proxy=strProxyToSpy, timeout=intRequestTimeout, headers=dictHeader) as res:
-                            if res.status == 200:
-                                strhtml = await res.text()
-                                soup = BeautifulSoup(strhtml, 'lxml')
-                                aFromWeb = soup.select('a')
-                                for eleA in aFromWeb:
-                                    objAddPage.AddToDB(eleA.get('href'))
-                                arrWebP=soup.select('p')
-                                objAddPage.AddPContent(arrWebP)
-                                # print(result)
-                            bolRetry = False
-                            # print("  After " + str(intTryTime) +
-                            #       " time, success reach " + eleWeb)
-                    except Exception as e:
-                        intTryTime += 1
-                        # print(" Get method error : " + str(e))
-                        # print('    Fail ' + str(intTryTime) + ' time')
-        except Exception as e:
-            print(" Session error : " + str(e))
+        # try:
+        #     async with aiohttp.ClientSession() as session:
+        # 判断是否需要重试以及是否所有代理均已用完
+        while (bolRetry and (intTryTime < intProxyLen)):
+            try:
+                # 导入代理
+                strProxyToSpy = "http://" + \
+                    arrProxy[intTryTime]["u"] + \
+                    ":"+arrProxy[intTryTime]["p"]
+                # print(strProxyToSpy)
+                # 异步请求网页内容
+                # async with session.get(eleWeb, proxy=strProxyToSpy, timeout=intRequestTimeout, headers=dictHeader) as res:
+                #     if res.status == 200:
+                #         strhtml = await res.text()
+                #         soup = BeautifulSoup(strhtml, 'lxml')
+                #         aFromWeb = soup.select('a')
+                #         for eleA in aFromWeb:
+                #             objAddPage.AddToDB(eleA.get('href'))
+                #         arrWebP=soup.select('p')
+                #         objAddPage.AddPContent(arrWebP)
+                #         # print(result)
+                #     bolRetry = False
+                #     # print("  After " + str(intTryTime) +
+                #     #       " time, success reach " + eleWeb)
+
+                # 添加 JS 渲染方法
+                options= Options()
+                # options.binary_location = "/usr/bin/chromedriver"
+                options.add_argument('--no-sandbox')    #解决DevToolsActivePort文件不存在的报错
+                options.add_argument('--disable-gpu')   #谷歌文档提到需要加上这个属性来规避bug
+                options.add_argument('--hide-scrollbars')   #隐藏滚动条, 应对一些特殊页面
+                options.add_argument('blink-settings=imagesEnabled=false')      #不加载图片, 提升速度
+                options.add_argument('--headless')      #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+                options.add_argument('–proxy-server='+strProxyToSpy)
+                # options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36' )
+                # browser = webdriver.PhantomJS('/usr/bin/chromedriver',chrome_options = options)
+                browserChorme = webdriver.Chrome('/usr/bin/chromedriver',chrome_options = options)
+                # browser = webdriver.Chrome('C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',chrome_options = options)
+                browserChorme.set_page_load_timeout(intRequestTimeout)
+                browserChorme.set_script_timeout(intRequestTimeout)
+                browserChorme.implicitly_wait(intRequestTimeout) 
+                browserChorme.get(eleWeb)
+
+                strhtml=browserChorme.page_source
+                # input=browser.find_element_by_class_name('zu-top-question') 
+                # print(input)
+                soup = BeautifulSoup(strhtml, 'lxml')
+                aFromWeb = soup.select('a')
+                for eleA in aFromWeb:
+                    objAddPage.AddToDB(eleA.get('href'))
+                arrWebP=soup.select('p')
+                objAddPage.AddPContent(arrWebP)
+                # print(result)
+                bolRetry = False
+                browserChorme.close()
+                print("  After " + str(intTryTime) +
+                      " time, success reach " + eleWeb)
+            except Exception as e:
+                intTryTime += 1
+                print(" Get method error : " + str(e))
+                print('    Fail ' + str(intTryTime) + ' time')
+        # except Exception as e:
+        #     print(" Session error : " + str(e))
 
 
 if __name__ == "__main__":
