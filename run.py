@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-07 22:52:00
+@LastEditTime : 2020-02-08 11:02:49
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -176,11 +176,13 @@ def funSpyWeb(eleWeb):
             browserChorme.set_script_timeout(intRequestTimeout)
             browserChorme.implicitly_wait(intRequestTimeout*2)
             browserChorme.get(eleWeb)
-            time.sleep(int(intRequestTimeout*2))
             strhtml=browserChorme.page_source
-            browserChorme.close()
-            browserChorme.quit()
+            
             if strhtml!='<html><head></head><body></body></html>':
+                time.sleep(int(intRequestTimeout*2))
+                strhtml=browserChorme.page_source
+                browserChorme.close()
+                browserChorme.quit()
                 # input=browser.find_element_by_class_name('zu-top-question') 
                 # print(input)
                 soup = BeautifulSoup(strhtml, 'lxml')
@@ -195,6 +197,8 @@ def funSpyWeb(eleWeb):
                 #     " time, success reach " + eleWeb)
             else:
                 intTryTime += 1
+                browserChorme.close()
+                browserChorme.quit()
                 # print('    Fail ' + str(intTryTime) + ' time')
         except Exception as e:
             intTryTime += 1
