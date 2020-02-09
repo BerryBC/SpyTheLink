@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-09 16:42:47
+@LastEditTime : 2020-02-09 17:30:53
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -174,7 +174,7 @@ def funSpyWeb(eleWeb):
             # browser = webdriver.Chrome('C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',chrome_options = options)
             browserChorme.set_page_load_timeout(intRequestTimeout)
             browserChorme.set_script_timeout(intRequestTimeout)
-            browserChorme.implicitly_wait(intRequestTimeout*5)
+            browserChorme.implicitly_wait(intRequestTimeout*4)
             browserChorme.get(eleWeb)
             strhtml=browserChorme.page_source
             
