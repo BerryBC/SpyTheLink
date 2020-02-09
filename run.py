@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-09 22:46:36
+@LastEditTime : 2020-02-09 23:03:32
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -67,7 +67,7 @@ def funSpyReusablePage():
     # loop.run_until_complete(waittask)
     # loop.close()
     for eleTarget in arrTarget:
-        funSpyWeb(eleTarget)
+        funSpyWeb(eleTarget,"p")
     threading.Timer(60*intReusableRepeatTime, funSpyReusablePage).start()
     print(' Reusable end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
