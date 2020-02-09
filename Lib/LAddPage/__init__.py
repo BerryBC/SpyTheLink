@@ -3,9 +3,10 @@
 @Author: BerryBC
 @Date: 2020-02-02 14:24:17
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-09 00:19:02
+@LastEditTime : 2020-02-09 22:29:48
 '''
 import time
+from urllib.parse import urlparse
 
 
 class claAddPage(object):
@@ -19,11 +20,22 @@ class claAddPage(object):
     def AnEmptyContentEle(self):
         return {'ct': '', 'e': 0, 'cf': False, 'jed': False, 't': int(time.time()*1000)}
 
-    def AddToDB(self, strHref):
+    def AddToDB(self, strHref,strInCurPageURL):
         # print(strHref)
         if not strHref is None:
-            bolHttps = ('http://' in strHref or 'https://' in strHref)
-            strCleanURL=self.CleanURL(strHref)
+            urlCurPageURL=urlparse(strInCurPageURL)
+            strCurLoc=urlCurPageURL.scheme+'://'+urlCurPageURL.netloc
+            strRealInsert=strHref
+            if len(strHref)>4:
+                if strHref[:4] != 'http':
+                    if strHref[1] == '/':
+                        strRealInsert=urlCurPageURL.scheme+':'+strHref
+                    elif strHref[0] == '/':
+                        strRealInsert=strCurLoc+strHref
+                else:
+                    strRealInsert=strHref
+            bolHttps = ('http://' in strRealInsert or 'https://' in strRealInsert)
+            strCleanURL=self.CleanURL(strRealInsert)
             if bolHttps:
                 if not self.objMongoDB.CheckOneExisit('pagedb-Crawled', {'url': strCleanURL}):
                     dictNewPage = self.AnEmptyPageEle()
@@ -31,6 +43,7 @@ class claAddPage(object):
                     dictNewPage['url'] = strCleanURL
                     dictNewPage['d'] = intDepth
                     self.objMongoDB.InsertOne('pagedb-Crawled', dictNewPage)
+                    # print(strCleanURL)
 
     def AddPContent(self, arrTagP):
         # print('   成功爬了一个网站')

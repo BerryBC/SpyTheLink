@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-09 21:07:20
+@LastEditTime : 2020-02-09 22:46:36
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -75,13 +75,21 @@ def funSpyReusablePage():
 def funSpyNewPage():
     print(' New begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
     arrTarget = []
-    curTarget = objLinkDB.LoadRandomLimit(
-        'pagedb-Crawled', {"ced": False}, intHowManyPageOneTime)
-    for eleTarget in curTarget:
-        objLinkDB.UpdateOneData(
-            'pagedb-Crawled', {'_id': eleTarget['_id']}, {'ced': True})
-        arrTarget.append(eleTarget['url'])
-    # print(arrTarget)
+    curRoot = objLinkDB.LoadAllData('pagedb-Custom')
+    for eleRoot in curRoot:
+        strRURL = eleRoot['rURL']
+        strTag = eleRoot['tag']
+
+        curTarget = objLinkDB.LoadRandomLimit(
+            'pagedb-Crawled', {'url': {'$regex': strRURL, '$options': "i"},"ced": False}, intHowManyPageOneTime)
+        for eleTarget in curTarget:
+            objLinkDB.UpdateOneData(
+                'pagedb-Crawled', {'_id': eleTarget['_id']}, {'ced': True})
+            # arrTarget.append(eleTarget['url'])
+            funSpyWeb(eleTarget['url'],strTag)
+        # print(arrTarget)
+
+    
     # 异步
     # loop = asyncio.new_event_loop()
     # asyncio.set_event_loop(loop)
@@ -90,10 +98,11 @@ def funSpyNewPage():
     #     *([funSpyWeb(strWebSite, semaphore) for strWebSite in arrTarget]))
     # loop.run_until_complete(waittask)
     # loop.close()
+    # for eleTarget in arrTarget:
+    #     funSpyWeb(eleTarget)
 
-    # 同步
-    for eleTarget in arrTarget:
-        funSpyWeb(eleTarget)
+
+
     threading.Timer(60*intNewRepeatTime, funSpyNewPage).start()
     print(' New end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -113,7 +122,7 @@ def funDeleteOldPage():
 
 # 我屈服了，我还是选择做一个同不的再躲开算了
 # async def funSpyWeb(eleWeb, inSemaphore):
-def funSpyWeb(eleWeb):
+def funSpyWeb(eleWeb,strInTag):
     # async with inSemaphore:
     bolRetry = True
     intTryTime = 0
@@ -179,7 +188,6 @@ def funSpyWeb(eleWeb):
             browserChorme.implicitly_wait(intRequestTimeout*4)
             browserChorme.get(eleWeb)
             strhtml=browserChorme.page_source
-            
             if strhtml!='<html><head></head><body></body></html>':
                 time.sleep(int(intRequestTimeout*4))
                 strhtml=browserChorme.page_source
@@ -190,8 +198,8 @@ def funSpyWeb(eleWeb):
                 soup = BeautifulSoup(strhtml, 'lxml')
                 aFromWeb = soup.select('a')
                 for eleA in aFromWeb:
-                    objAddPage.AddToDB(eleA.get('href'))
-                arrWebP=soup.select('p')
+                    objAddPage.AddToDB(eleA.get('href'),eleWeb)
+                arrWebP=soup.select(strInTag)
                 objAddPage.AddPContent(arrWebP)
                 # print(result)
                 bolRetry = False
