@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-10 19:07:48
+@LastEditTime : 2020-02-10 22:52:54
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -50,6 +50,8 @@ def funMain():
     #     print(dd)
     # print(objLinkDB.CheckOneExisit('proxydb',{'u':'106.85.133.109'}))
 
+    threading.Timer(60*intNewRepeatTime, funMain).start()
+
 
 def funSpyReusablePage():
     print(' Reusable begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
@@ -68,7 +70,7 @@ def funSpyReusablePage():
     # loop.close()
     for eleTarget in arrTarget:
         funSpyWeb(eleTarget,"p")
-    threading.Timer(60*intReusableRepeatTime, funSpyReusablePage).start()
+    # threading.Timer(60*intReusableRepeatTime, funSpyReusablePage).start()
     print(' Reusable end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
@@ -103,7 +105,7 @@ def funSpyNewPage():
 
 
 
-    threading.Timer(60*intNewRepeatTime, funSpyNewPage).start()
+    # threading.Timer(60*intNewRepeatTime, funSpyNewPage).start()
     print(' New end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
@@ -117,7 +119,7 @@ def funDeleteOldPage():
         'sampledb', {'t': {'$lt': (intNow-(intDeleteTime)*3)},'cf':False})
     print(' Delete Content Number : ' + str(curDelete.deleted_count))
     # print(intNow)
-    threading.Timer(60*intDeleteRepeatTime, funDeleteOldPage).start()
+    # threading.Timer(60*intDeleteRepeatTime, funDeleteOldPage).start()
     print(' Delete end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 # 我屈服了，我还是选择做一个同不的再躲开算了
