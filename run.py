@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-11 10:14:52
+@LastEditTime : 2020-02-11 16:24:23
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -171,6 +171,9 @@ def funSpyWeb(eleWeb,strInTag):
             # 添加 JS 渲染方法
             options= Options()
             
+
+            prefs = {'profile.default_content_setting_values' :{'notifications' : 2}}
+            options.add_experimental_option('prefs',prefs)
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-gpu')
             options.add_argument('--hide-scrollbars') 
@@ -185,7 +188,7 @@ def funSpyWeb(eleWeb,strInTag):
             options.add_argument('--start-maximized')
             options.add_argument('--disable-infobars')
 
-            if random.randint(0,60)!=33:
+            if random.randint(0,68)!=33:
                 options.add_argument('--proxy-server='+strProxyToSpy)
             # options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36' )
             # browser = webdriver.PhantomJS('/usr/bin/chromedriver',chrome_options = options)
