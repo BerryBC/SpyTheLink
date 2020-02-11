@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-11 00:33:34
+@LastEditTime : 2020-02-11 10:14:52
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -57,6 +57,8 @@ def funMain():
 
 
 def funSpyReusablePage():
+    intRandMin=random.randint(30,60)*60
+    print(' Reusable sleep time is : '+str(intRandMin/60)+' mins')
     print(' Reusable begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
     arrTarget = []
     curTarget = objLinkDB.LoadAllData('pagedb-Reuseable')
@@ -72,6 +74,7 @@ def funSpyReusablePage():
     # loop.run_until_complete(waittask)
     # loop.close()
     for eleTarget in arrTarget:
+        time.sleep(intRandMin)
         funSpyWeb(eleTarget,"p")
     threading.Timer(60*intReusableRepeatTime, funSpyReusablePage).start()
     print(' Reusable end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
