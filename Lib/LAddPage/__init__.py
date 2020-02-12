@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 14:24:17
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-09 22:29:48
+@LastEditTime : 2020-02-12 10:21:12
 '''
 import time
 from urllib.parse import urlparse
@@ -20,22 +20,23 @@ class claAddPage(object):
     def AnEmptyContentEle(self):
         return {'ct': '', 'e': 0, 'cf': False, 'jed': False, 't': int(time.time()*1000)}
 
-    def AddToDB(self, strHref,strInCurPageURL):
+    def AddToDB(self, strHref, strInCurPageURL):
         # print(strHref)
         if not strHref is None:
-            urlCurPageURL=urlparse(strInCurPageURL)
-            strCurLoc=urlCurPageURL.scheme+'://'+urlCurPageURL.netloc
-            strRealInsert=strHref
-            if len(strHref)>4:
+            urlCurPageURL = urlparse(strInCurPageURL)
+            strCurLoc = urlCurPageURL.scheme+'://'+urlCurPageURL.netloc
+            strRealInsert = strHref
+            if len(strHref) > 4:
                 if strHref[:4] != 'http':
                     if strHref[1] == '/':
-                        strRealInsert=urlCurPageURL.scheme+':'+strHref
+                        strRealInsert = urlCurPageURL.scheme+':'+strHref
                     elif strHref[0] == '/':
-                        strRealInsert=strCurLoc+strHref
+                        strRealInsert = strCurLoc+strHref
                 else:
-                    strRealInsert=strHref
-            bolHttps = ('http://' in strRealInsert or 'https://' in strRealInsert)
-            strCleanURL=self.CleanURL(strRealInsert)
+                    strRealInsert = strHref
+            bolHttps = (
+                'http://' in strRealInsert or 'https://' in strRealInsert)
+            strCleanURL = self.CleanURL(strRealInsert)
             if bolHttps:
                 if not self.objMongoDB.CheckOneExisit('pagedb-Crawled', {'url': strCleanURL}):
                     dictNewPage = self.AnEmptyPageEle()
@@ -45,11 +46,12 @@ class claAddPage(object):
                     self.objMongoDB.InsertOne('pagedb-Crawled', dictNewPage)
                     # print(strCleanURL)
 
-    def AddPContent(self, arrTagP):
+    def AddPContent(self, arrTagP, strInCurURL):
         # print('   成功爬了一个网站')
         strPContent = ''
         for eleP in arrTagP:
             strPContent += eleP.get_text()+' '
+        strPContent = strInCurURL+'\n'+strPContent
         dictNewContent = self.AnEmptyContentEle()
         dictNewContent['ct'] = strPContent
         if len(strPContent) > 20:

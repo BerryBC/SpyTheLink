@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-11 16:24:23
+@LastEditTime : 2020-02-12 10:21:23
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -211,7 +211,7 @@ def funSpyWeb(eleWeb,strInTag):
                 for eleA in aFromWeb:
                     objAddPage.AddToDB(eleA.get('href'),eleWeb)
                 arrWebP=soup.select(strInTag)
-                objAddPage.AddPContent(arrWebP)
+                objAddPage.AddPContent(arrWebP,eleWeb)
                 # print(result)
                 bolRetry = False
                 # print("  After " + str(intTryTime) +
