@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-05 00:31:10
+@LastEditTime : 2020-02-13 00:39:02
 '''
 
 from configobj import ConfigObj
@@ -29,6 +29,13 @@ class claMongoDB(object):
         self.strDBHost = self.objConfig[strDBField]['hosts']
         self.dbClient = pymongo.MongoClient(
             'mongodb://'+self.strDBHost+':'+self.strPort+'/')
+        strDBList=self.objConfig[strDBField]['dbin']
+        self.dbInside={}
+        arrDBList=strDBList.split(',')
+        for strEleDB in arrDBList:
+            dbMongo=self.dbClient[self.objConfig[strEleDB]['database']]
+            dbMongo.authenticate(self.objConfig[strEleDB]['user'], self.objConfig[strEleDB]['passwork'])
+            self.dbInside[strEleDB]=dbMongo[self.objConfig[strEleDB]['table']]
         # dbMongo = self.dbClient[self.strDBName]
         # dbMongo.authenticate(self.strDBUser, self.strDBPW)
 
@@ -76,10 +83,10 @@ class claMongoDB(object):
 
     # 这个是缩短的
     def GetTable(self, strTbCfgSet):
-        dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
-        dbMongo.authenticate(
-            self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
-        return dbMongo[self.objConfig[strTbCfgSet]['table']]
+        # dbMongo = self.dbClient[self.objConfig[strTbCfgSet]['database']]
+        # dbMongo.authenticate(
+        #     self.objConfig[strTbCfgSet]['user'], self.objConfig[strTbCfgSet]['passwork'])
+        return self.dbInside[strTbCfgSet]
 
     def LoadRandomLimit(self, strTbCfgSet, dictFilter, intLimit):
         return self.GetTable(strTbCfgSet).aggregate([{'$match': dictFilter}, {'$sample': {'size': intLimit}}])
