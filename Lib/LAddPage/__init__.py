@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 14:24:17
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-13 12:53:08
+@LastEditTime : 2020-02-13 14:34:20
 '''
 import time
 from urllib.parse import urlparse
@@ -54,7 +54,7 @@ class claAddPage(object):
         strPContent = strInCurURL+'\n'+strPContent
         dictNewContent = self.AnEmptyContentEle()
         dictNewContent['ct'] = strPContent
-        if len(strPContent) > 20:
+        if (len(strPContent)-len(strInCurURL)) > 20:
             # print('   成功爬了一个网站')
             self.objMongoDB.InsertOne('sampledb', dictNewContent)
         # else :
