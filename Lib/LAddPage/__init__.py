@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 14:24:17
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-12 10:21:12
+@LastEditTime : 2020-02-13 12:53:08
 '''
 import time
 from urllib.parse import urlparse
@@ -50,7 +50,7 @@ class claAddPage(object):
         # print('   成功爬了一个网站')
         strPContent = ''
         for eleP in arrTagP:
-            strPContent += eleP.get_text()+' '
+            strPContent += eleP.get_text().strip()+'\n'
         strPContent = strInCurURL+'\n'+strPContent
         dictNewContent = self.AnEmptyContentEle()
         dictNewContent['ct'] = strPContent
