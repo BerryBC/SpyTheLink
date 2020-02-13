@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-12 17:04:50
+@LastEditTime : 2020-02-13 17:46:19
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -58,6 +58,7 @@ def funMain():
 
 def funSpyReusablePage():
     try:
+        objLinkDB.CleanMySelf()
         intRandMin = random.randint(30, 60)*60
         print(' Reusable sleep time is : '+str(intRandMin/60)+' mins')
         print(' Reusable begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
@@ -87,6 +88,7 @@ def funSpyReusablePage():
 
 def funSpyNewPage():
     try:
+        objLinkDB.CleanMySelf()
         print(' New begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
         arrTarget = []
         curRoot = objLinkDB.LoadAllData('pagedb-Custom')
@@ -124,6 +126,7 @@ def funSpyNewPage():
 
 def funDeleteOldPage():
     try:
+        objLinkDB.CleanMySelf()
         print(' Delete begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
         intNow = int(time.time()*1000)
         curDelete = objLinkDB.DeleteSome(

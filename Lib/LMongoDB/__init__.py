@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-13 11:29:57
+@LastEditTime : 2020-02-13 17:40:42
 '''
 
 from configobj import ConfigObj
@@ -21,6 +21,7 @@ class claMongoDB(object):
     def __init__(self, strCfgPath, strDBField):
         # strCfgPath will be '../../cfg/dbCfg.ini'
         # strDBField will be 'mongodb'
+        self.strDBConf=strDBField
         self.objConfig = ConfigObj(strCfgPath)
         self.strDBPW = self.objConfig[strDBField]['passwork']
         self.strDBUser = self.objConfig[strDBField]['user']
@@ -29,13 +30,14 @@ class claMongoDB(object):
         self.strDBHost = self.objConfig[strDBField]['hosts']
         self.dbClient = pymongo.MongoClient(
             'mongodb://'+self.strDBHost+':'+self.strPort+'/')
-        strDBList=self.objConfig[strDBField]['dbin']
+        strDBList=self.objConfig[self.strDBConf]['dbin']
         self.dbInside={}
         arrDBList=strDBList.split(',')
         for strEleDB in arrDBList:
             dbMongo=self.dbClient[self.objConfig[strEleDB]['database']]
             dbMongo.authenticate(self.objConfig[strEleDB]['user'], self.objConfig[strEleDB]['passwork'])
             self.dbInside[strEleDB]=dbMongo[self.objConfig[strEleDB]['table']]
+        
         # dbMongo = self.dbClient[self.strDBName]
         # dbMongo.authenticate(self.strDBUser, self.strDBPW)
 
@@ -123,3 +125,15 @@ class claMongoDB(object):
 
     def LoadSome(self, strTbCfgSet, dictFilter):
         return self.GetTable(strTbCfgSet).find(dictFilter)
+
+    def CleanMySelf(self):
+        self.dbClient.close()
+        self.dbClient = pymongo.MongoClient(
+            'mongodb://'+self.strDBHost+':'+self.strPort+'/')
+        strDBList=self.objConfig[self.strDBConf]['dbin']
+        self.dbInside={}
+        arrDBList=strDBList.split(',')
+        for strEleDB in arrDBList:
+            dbMongo=self.dbClient[self.objConfig[strEleDB]['database']]
+            dbMongo.authenticate(self.objConfig[strEleDB]['user'], self.objConfig[strEleDB]['passwork'])
+            self.dbInside[strEleDB]=dbMongo[self.objConfig[strEleDB]['table']]
