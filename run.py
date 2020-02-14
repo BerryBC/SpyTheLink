@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors  : BerryBC
-@LastEditTime : 2020-02-13 19:31:01
+@LastEditTime : 2020-02-14 15:36:29
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -59,7 +59,7 @@ def funMain():
 def funSpyReusablePage():
     try:
         objLinkDB.CleanMySelf()
-        intRandMin = random.randint(30, 60)*60
+        intRandMin = random.randint(10, 60)*60
         print(' Reusable sleep time is : '+str(intRandMin/60)+' mins')
         print(' Reusable begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
         arrTarget = []
