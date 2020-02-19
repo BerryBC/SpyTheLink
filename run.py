@@ -219,7 +219,7 @@ def funSpyWeb(eleWeb, strInTag):
                 browserChorme.get(eleWeb)
                 strhtml = browserChorme.page_source
                 if strhtml != '<html><head></head><body></body></html>':
-                    time.sleep(int(intRequestTimeout*3.5))
+                    time.sleep(int(intRequestTimeout*4))
                     strhtml = browserChorme.page_source
                     browserChorme.close()
                     browserChorme.quit()
