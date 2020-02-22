@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-02-18 13:20:45
+@LastEditTime: 2020-02-23 00:31:15
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -58,7 +58,7 @@ def funMain():
 
 def funSpyReusablePage():
     try:
-        objLinkDB.CleanMySelf()
+        # objLinkDB.CleanMySelf()
         intRandMin = random.randint(10, 60)*60
         print(' Reusable sleep time is : '+str(intRandMin/60)+' mins')
         print(' Reusable begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
@@ -88,7 +88,7 @@ def funSpyReusablePage():
 
 def funSpyNewPage():
     try:
-        objLinkDB.CleanMySelf()
+        # objLinkDB.CleanMySelf()
         print(' New begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
         arrTarget = []
         curRoot = objLinkDB.LoadAllData('pagedb-Custom')
@@ -126,7 +126,7 @@ def funSpyNewPage():
 
 def funDeleteOldPage():
     try:
-        objLinkDB.CleanMySelf()
+        # objLinkDB.CleanMySelf()
         print(' Delete begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
         intNow = int(time.time()*1000)
         curDelete = objLinkDB.DeleteSome(
@@ -215,7 +215,7 @@ def funSpyWeb(eleWeb, strInTag):
                 # browser = webdriver.Chrome('C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',chrome_options = options)
                 browserChorme.set_page_load_timeout(intRequestTimeout)
                 browserChorme.set_script_timeout(intRequestTimeout)
-                browserChorme.implicitly_wait(intRequestTimeout*3.5)
+                browserChorme.implicitly_wait(intRequestTimeout*4.5)
                 browserChorme.get(eleWeb)
                 strhtml = browserChorme.page_source
                 if strhtml != '<html><head></head><body></body></html>':
