@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-02-26 22:43:17
+@LastEditTime: 2020-02-26 23:14:25
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -44,7 +44,6 @@ dictNowRepeatTime = {'t':0}
 
 
 def funMain():
-    print('Program begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
     # funSpyReusablePage()
     # funSpyNewPage()
     # funDeleteOldPage()
@@ -264,4 +263,5 @@ def funSpyWeb(eleWeb, strInTag):
 
 
 if __name__ == "__main__":
+    print('Program begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
     funMain()
