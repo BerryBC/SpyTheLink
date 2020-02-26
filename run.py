@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-02-26 23:14:25
+@LastEditTime: 2020-02-27 01:04:16
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -157,6 +157,8 @@ def funDeleteOldPage():
 
 def funSpyWeb(eleWeb, strInTag):
     try:
+        intRandMin = random.randint(1, 60)/1000
+        time.sleep(intRandMin)
         # async with inSemaphore:
         bolRetry = True
         intTryTime = 0
