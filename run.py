@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-02-26 22:42:20
+@LastEditTime: 2020-02-26 22:43:17
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -69,8 +69,8 @@ def funMain():
 def funSpyReusablePage():
     try:
         objLinkDB.CleanMySelf()
-        intRandMin = random.randint(10, 60)*60
-        print(' Reusable sleep time is : '+str(intRandMin/60)+' mins')
+        # intRandMin = random.randint(10, 60)*60
+        # print(' Reusable sleep time is : '+str(intRandMin/60)+' mins')
         print(' Reusable begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
         arrTarget = []
         curTarget = objLinkDB.LoadAllData('pagedb-Reuseable')
@@ -86,7 +86,7 @@ def funSpyReusablePage():
         # loop.run_until_complete(waittask)
         # loop.close()
         for eleTarget in arrTarget:
-            time.sleep(intRandMin)
+            # time.sleep(intRandMin)
             funSpyWeb(eleTarget, "p")
     except Exception as e:
         print(' Error of MongoDB at "funSpyReusablePage" ' +
