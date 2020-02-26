@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-02-26 22:38:17
+@LastEditTime: 2020-02-26 22:42:20
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -40,7 +40,7 @@ intDeletFreq = int(objParam['param']['DeletFreq'])
 #     'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
 #     'cache-control': 'no-cache',
 #     'Pragma': 'no-cache'}
-intNowRepeatTime = 0
+dictNowRepeatTime = {'t':0}
 
 
 def funMain():
@@ -48,13 +48,13 @@ def funMain():
     # funSpyReusablePage()
     # funSpyNewPage()
     # funDeleteOldPage()
-    if intNowRepeatTime % intReusableFreq == 0:
+    if dictNowRepeatTime['t'] % intReusableFreq == 0:
         funSpyReusablePage()
-    elif intNowRepeatTime % intReusableFreq == 0:
+    elif dictNowRepeatTime['t'] % intReusableFreq == 0:
         funDeleteOldPage()
     else:
         funSpyNewPage()
-    intNowRepeatTime+=1
+    dictNowRepeatTime['t']+=1
     funMain()
     # threading.Thread(target=funSpyReusablePage).start()
     # threading.Thread(target=funSpyNewPage).start()
