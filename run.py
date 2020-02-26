@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-02-24 21:00:29
+@LastEditTime: 2020-02-26 22:11:23
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -32,12 +32,15 @@ intDeleteTime = int(objParam['param']['DeleteTime'])
 intReusableRepeatTime = int(objParam['param']['ReusableRepeatTime'])
 intNewRepeatTime = int(objParam['param']['NewRepeatTime'])
 intDeleteRepeatTime = int(objParam['param']['DeleteRepeatTime'])
+intReusableFreq = int(objParam['param']['ReusableFreq'])
+intDeletFreq = int(objParam['param']['DeletFreq'])
 # dictHeader = {
 #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.78 Safari/537.36',
 #     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
 #     'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
 #     'cache-control': 'no-cache',
 #     'Pragma': 'no-cache'}
+intRepeatTime = 0
 
 
 def funMain():
@@ -45,14 +48,21 @@ def funMain():
     # funSpyReusablePage()
     # funSpyNewPage()
     # funDeleteOldPage()
-    threading.Thread(target=funSpyReusablePage).start()
-    threading.Thread(target=funSpyNewPage).start()
-    threading.Thread(target=funDeleteOldPage).start()
+    if intRepeatTime % intReusableFreq == 0:
+        funSpyReusablePage()
+    elif intRepeatTime % intReusableFreq == 0:
+        funDeleteOldPage()
+    else:
+        funSpyNewPage()
+    intRepeatTime+=1
+    funMain()
+    # threading.Thread(target=funSpyReusablePage).start()
+    # threading.Thread(target=funSpyNewPage).start()
+    # threading.Thread(target=funDeleteOldPage).start()
     # print(type(objLinkDB))
     # for dd in objLinkDB.LoadRandomLimit('proxydb',{"fail": {"$lte": 8}},20):
     #     print(dd)
     # print(objLinkDB.CheckOneExisit('proxydb',{'u':'106.85.133.109'}))
-
     # threading.Timer(60*intNewRepeatTime, funMain).start()
 
 
@@ -82,7 +92,7 @@ def funSpyReusablePage():
         print(' Error of MongoDB at "funSpyReusablePage" ' +
               time.strftime('%Y-%m-%d %H:%M:%S'))
 
-    threading.Timer(60*intReusableRepeatTime, funSpyReusablePage).start()
+    # threading.Timer(60*intReusableRepeatTime, funSpyReusablePage).start()
     print(' Reusable end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
@@ -120,7 +130,7 @@ def funSpyNewPage():
         print(' Error of MongoDB at "funSpyNewPage" ' +
               time.strftime('%Y-%m-%d %H:%M:%S'))
 
-    threading.Timer(60*intNewRepeatTime, funSpyNewPage).start()
+    # threading.Timer(60*intNewRepeatTime, funSpyNewPage).start()
     print(' New end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
@@ -130,7 +140,7 @@ def funDeleteOldPage():
         print(' Delete begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
         intNow = int(time.time()*1000)
         curDelete = objLinkDB.DeleteSome(
-            'pagedb-Crawled', {'t': {'$lt': intNow-intDeleteTime},'ced':False})
+            'pagedb-Crawled', {'t': {'$lt': intNow-intDeleteTime}, 'ced': False})
         print(' Delete URL Number : ' + str(curDelete.deleted_count))
         curDelete = objLinkDB.DeleteSome(
             'sampledb', {'t': {'$lt': (intNow-(intDeleteTime)*3)}, 'cf': False})
@@ -138,8 +148,8 @@ def funDeleteOldPage():
         # print(intNow)
     except Exception as e:
         print(' Error of MongoDB at "funDeleteOldPage" ' +
-            time.strftime('%Y-%m-%d %H:%M:%S'))
-    threading.Timer(60*intDeleteRepeatTime, funDeleteOldPage).start()
+              time.strftime('%Y-%m-%d %H:%M:%S'))
+    # threading.Timer(60*intDeleteRepeatTime, funDeleteOldPage).start()
     print(' Delete end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 # 我屈服了，我还是选择做一个同不的再躲开算了
@@ -250,7 +260,8 @@ def funSpyWeb(eleWeb, strInTag):
         #     print(" Session error : " + str(e))
     except Exception as e:
         print(' Error of MongoDB at "funDeleteOldPage" ' +
-            time.strftime('%Y-%m-%d %H:%M:%S'))
+              time.strftime('%Y-%m-%d %H:%M:%S'))
+
 
 if __name__ == "__main__":
     funMain()
