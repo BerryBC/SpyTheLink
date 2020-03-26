@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-02-27 01:04:16
+@LastEditTime: 2020-03-26 21:03:57
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -49,7 +49,7 @@ def funMain():
     # funDeleteOldPage()
     if dictNowRepeatTime['t'] % intReusableFreq == 0:
         funSpyReusablePage()
-    elif dictNowRepeatTime['t'] % intReusableFreq == 0:
+    elif dictNowRepeatTime['t'] % intDeletFreq == 0:
         funDeleteOldPage()
     else:
         funSpyNewPage()
