@@ -4,15 +4,17 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-03-26 21:03:57
+@LastEditTime: 2020-04-28 22:36:37
 '''
 
 from Lib.LMongoDB import claMongoDB
 from Lib.LAddPage import claAddPage
+from Lib.LLearn import  claLearn
 from configobj import ConfigObj
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
 import asyncio
 import aiohttp
 import threading
@@ -22,6 +24,7 @@ import random
 strCfgPath = './cfg/dbCfg.ini'
 objLinkDB = claMongoDB(strCfgPath, 'mongodb')
 objAddPage = claAddPage(objLinkDB)
+objLearn=claLearn(objLinkDB)
 objParam = ConfigObj(strCfgPath)
 intHowManyProxy = int(objParam['param']['HowManyProxy'])
 intHowManyPageOneTime = int(objParam['param']['HowManyPageOneTime'])
@@ -217,7 +220,7 @@ def funSpyWeb(eleWeb, strInTag):
                 options.add_argument('--start-maximized')
                 options.add_argument('--disable-infobars')
 
-                if random.randint(0, 68) != 33:
+                if random.randint(0, 30) != 28:
                     options.add_argument('--proxy-server='+strProxyToSpy)
                 # options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36' )
                 # browser = webdriver.PhantomJS('/usr/bin/chromedriver',chrome_options = options)
@@ -241,7 +244,8 @@ def funSpyWeb(eleWeb, strInTag):
                     for eleA in aFromWeb:
                         objAddPage.AddToDB(eleA.get('href'), eleWeb)
                     arrWebP = soup.select(strInTag)
-                    objAddPage.AddPContent(arrWebP, eleWeb)
+                    intJudEmo=objLearn.JudContent(arrWebP)
+                    objAddPage.AddPContent(arrWebP, eleWeb,intJudEmo)
                     # print(result)
                     bolRetry = False
                     # print("  After " + str(intTryTime) +

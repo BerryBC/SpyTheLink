@@ -2,8 +2,8 @@
 @Descripttion: 链接 MongoDB 的库
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
-@LastEditors  : BerryBC
-@LastEditTime : 2020-02-13 17:40:42
+@LastEditors: BerryBC
+@LastEditTime: 2020-04-27 22:42:29
 '''
 
 from configobj import ConfigObj
@@ -137,3 +137,6 @@ class claMongoDB(object):
             dbMongo=self.dbClient[self.objConfig[strEleDB]['database']]
             dbMongo.authenticate(self.objConfig[strEleDB]['user'], self.objConfig[strEleDB]['passwork'])
             self.dbInside[strEleDB]=dbMongo[self.objConfig[strEleDB]['table']]
+    
+    def LoadOneBySort(self, strTbCfgSet, dictFilter,arrSort):
+        return self.GetTable(strTbCfgSet).find(dictFilter, sort=arrSort, limit=1)

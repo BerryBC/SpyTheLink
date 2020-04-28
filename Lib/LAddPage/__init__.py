@@ -2,8 +2,8 @@
 @Descripttion: 添加爬出来的页面 URL 进数据库
 @Author: BerryBC
 @Date: 2020-02-02 14:24:17
-@LastEditors  : BerryBC
-@LastEditTime : 2020-02-13 14:34:20
+@LastEditors: BerryBC
+@LastEditTime: 2020-04-28 22:38:56
 '''
 import time
 from urllib.parse import urlparse
@@ -46,7 +46,7 @@ class claAddPage(object):
                     self.objMongoDB.InsertOne('pagedb-Crawled', dictNewPage)
                     # print(strCleanURL)
 
-    def AddPContent(self, arrTagP, strInCurURL):
+    def AddPContent(self, arrTagP, strInCurURL,intEmo):
         # print('   成功爬了一个网站')
         strPContent = ''
         for eleP in arrTagP:
@@ -54,6 +54,8 @@ class claAddPage(object):
         strPContent = strInCurURL+'\n'+strPContent
         dictNewContent = self.AnEmptyContentEle()
         dictNewContent['ct'] = strPContent
+        dictNewContent['jed'] = True
+        dictNewContent['e'] = intEmo
         if (len(strPContent)-len(strInCurURL)) > 20:
             # print('   成功爬了一个网站')
             self.objMongoDB.InsertOne('sampledb', dictNewContent)
