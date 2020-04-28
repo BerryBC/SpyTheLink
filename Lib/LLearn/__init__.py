@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-29 00:23:29
+@LastEditTime: 2020-04-29 00:25:42
 '''
 import joblib
 import jieba
@@ -57,9 +57,9 @@ class claLearn(object):
                 strNow = datetime.datetime.now().strftime("%Y/%m/%d")
                 dateNow=parser.parse(strNow)
 
-                print(dateNow)
-                print(eleKW)
-                print(intEmo)
+                print(type(dateNow))
+                print(type(eleKW))
+                print(type(intEmo))
 
                 objWordNum=self.objMongoDB.LoadOne('clfdb-kw', {'date': dateNow,'kw':eleKW,'e':intEmo})
                 if objWordNum is None:
