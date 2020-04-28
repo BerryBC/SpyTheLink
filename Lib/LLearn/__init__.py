@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-28 23:25:15
+@LastEditTime: 2020-04-28 23:30:28
 '''
 import joblib
 import jieba
@@ -21,7 +21,6 @@ class claLearn(object):
 
     def LoadLatestClf(self):
         self.objLatestClfCfg=self.objMongoDB.LoadOneBySort('clfdb', {},[('lt',-1)])
-        print(self.objLatestClfCfg['clfFileName'])
         self.clfLatestClf= joblib.load("../SpyDataWebAppAndAPI/ClfFile/"+self.objLatestClfCfg['clfFileName'])
 
     def JudContent(self,arrP):
