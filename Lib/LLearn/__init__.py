@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-29 00:10:24
+@LastEditTime: 2020-04-29 00:15:51
 '''
 import joblib
 import jieba
@@ -21,7 +21,6 @@ class claLearn(object):
 
     def LoadLatestClf(self):
         self.objLatestClfCfg=self.objMongoDB.LoadOneBySort('clfdb', {},[('lt',-1)])
-        print(len(self.objLatestClfCfg['kwlist']))
         self.clfLatestClf=BaggingClassifier(base_estimator=LinearSVC(random_state=0, tol=1e-05, max_iter=10000))
         self.clfLatestClf= joblib.load("../SpyDataWebAppAndAPI/ClfFile/"+self.objLatestClfCfg['clfFileName'])
 
@@ -51,8 +50,7 @@ class claLearn(object):
         intTmpCount=0
         if bolNotUseless:
             print("有一个神奇的情绪产生了")
-            print(len(arrKWToClf))
-            intEmo=self.clfLatestClf(arrKWToClf)
+            intEmo=self.clfLatestClf.predict(arrKWToClf)
             for eleKW in arrContentKW:
                 intTmpCount+=1
                 strNow = datetime.datetime.now().strftime("%Y/%m/%d")
