@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-29 00:10:38
+@LastEditTime: 2020-04-29 00:31:25
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -99,38 +99,38 @@ def funSpyReusablePage():
 
 
 def funSpyNewPage():
-    # try:
-    objLinkDB.CleanMySelf()
-    print(' New begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
-    arrTarget = []
-    curRoot = objLinkDB.LoadAllData('pagedb-Custom')
-    for eleRoot in curRoot:
-        strRURL = eleRoot['rURL']
-        strTag = eleRoot['tag']
+    try:
+        objLinkDB.CleanMySelf()
+        print(' New begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+        arrTarget = []
+        curRoot = objLinkDB.LoadAllData('pagedb-Custom')
+        for eleRoot in curRoot:
+            strRURL = eleRoot['rURL']
+            strTag = eleRoot['tag']
 
-        curTarget = objLinkDB.LoadRandomLimit(
-            'pagedb-Crawled', {'url': {'$regex': strRURL, '$options': "i"}, "ced": False}, intHowManyPageOneTime)
-        for eleTarget in curTarget:
-            objLinkDB.UpdateOneData(
-                'pagedb-Crawled', {'_id': eleTarget['_id']}, {'ced': True})
-            # arrTarget.append(eleTarget['url'])
-            funSpyWeb(eleTarget['url'], strTag)
-        # print(arrTarget)
+            curTarget = objLinkDB.LoadRandomLimit(
+                'pagedb-Crawled', {'url': {'$regex': strRURL, '$options': "i"}, "ced": False}, intHowManyPageOneTime)
+            for eleTarget in curTarget:
+                objLinkDB.UpdateOneData(
+                    'pagedb-Crawled', {'_id': eleTarget['_id']}, {'ced': True})
+                # arrTarget.append(eleTarget['url'])
+                funSpyWeb(eleTarget['url'], strTag)
+            # print(arrTarget)
 
-    # 异步
-    # loop = asyncio.new_event_loop()
-    # asyncio.set_event_loop(loop)
-    # semaphore = asyncio.Semaphore(intSemaphore)
-    # waittask = asyncio.gather(
-    #     *([funSpyWeb(strWebSite, semaphore) for strWebSite in arrTarget]))
-    # loop.run_until_complete(waittask)
-    # loop.close()
-    # for eleTarget in arrTarget:
-    #     funSpyWeb(eleTarget)
+        # 异步
+        # loop = asyncio.new_event_loop()
+        # asyncio.set_event_loop(loop)
+        # semaphore = asyncio.Semaphore(intSemaphore)
+        # waittask = asyncio.gather(
+        #     *([funSpyWeb(strWebSite, semaphore) for strWebSite in arrTarget]))
+        # loop.run_until_complete(waittask)
+        # loop.close()
+        # for eleTarget in arrTarget:
+        #     funSpyWeb(eleTarget)
 
-    # except Exception as e:
-    #     print(' Error of MongoDB at "funSpyNewPage" ' +
-    #           time.strftime('%Y-%m-%d %H:%M:%S'))
+    except Exception as e:
+        print(' Error of MongoDB at "funSpyNewPage" ' +
+              time.strftime('%Y-%m-%d %H:%M:%S'))
 
     # threading.Timer(60*intNewRepeatTime, funSpyNewPage).start()
     print(' New end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
@@ -159,114 +159,114 @@ def funDeleteOldPage():
 
 
 def funSpyWeb(eleWeb, strInTag):
-    # try:
-    intRandMin = random.randint(1, 60)/1000
-    time.sleep(intRandMin)
-    # async with inSemaphore:
-    bolRetry = True
-    intTryTime = 0
-    # arrProxy=[]
-    # for eleProxy in objLinkDB.LoadRandomLimit('proxydb', {"fail": {"$lte": intLessThenFail}},intHowManyProxy):
-    #     arrProxy.append(arrProxy)
-    # print(type(arrProxy))
-    arrProxy = objLinkDB.LoadRandomLimit(
-        'proxydb', {"fail": {"$lte": intLessThenFail}}, intHowManyProxy)
-    arrProxy = list(arrProxy)
-    intProxyLen = len(arrProxy)
-    # print(intProxyLen)
-    # try:
-    #     async with aiohttp.ClientSession() as session:
-    # 判断是否需要重试以及是否所有代理均已用完
-    while (bolRetry and (intTryTime < intProxyLen)):
-        try:
-            # 导入代理
-            strProxyToSpy = "http://" + \
-                arrProxy[intTryTime]["u"] + \
-                ":"+arrProxy[intTryTime]["p"]
-            # print(strProxyToSpy)
-            # 异步请求网页内容
-            # async with session.get(eleWeb, proxy=strProxyToSpy, timeout=intRequestTimeout, headers=dictHeader) as res:
-            #     if res.status == 200:
-            #         strhtml = await res.text()
-            #         soup = BeautifulSoup(strhtml, 'lxml')
-            #         aFromWeb = soup.select('a')
-            #         for eleA in aFromWeb:
-            #             objAddPage.AddToDB(eleA.get('href'))
-            #         arrWebP=soup.select('p')
-            #         objAddPage.AddPContent(arrWebP)
-            #         # print(result)
-            #     bolRetry = False
-            #     # print("  After " + str(intTryTime) +
-            #     #       " time, success reach " + eleWeb)
+    try:
+        intRandMin = random.randint(1, 60)/1000
+        time.sleep(intRandMin)
+        # async with inSemaphore:
+        bolRetry = True
+        intTryTime = 0
+        # arrProxy=[]
+        # for eleProxy in objLinkDB.LoadRandomLimit('proxydb', {"fail": {"$lte": intLessThenFail}},intHowManyProxy):
+        #     arrProxy.append(arrProxy)
+        # print(type(arrProxy))
+        arrProxy = objLinkDB.LoadRandomLimit(
+            'proxydb', {"fail": {"$lte": intLessThenFail}}, intHowManyProxy)
+        arrProxy = list(arrProxy)
+        intProxyLen = len(arrProxy)
+        # print(intProxyLen)
+        # try:
+        #     async with aiohttp.ClientSession() as session:
+        # 判断是否需要重试以及是否所有代理均已用完
+        while (bolRetry and (intTryTime < intProxyLen)):
+            try:
+                # 导入代理
+                strProxyToSpy = "http://" + \
+                    arrProxy[intTryTime]["u"] + \
+                    ":"+arrProxy[intTryTime]["p"]
+                # print(strProxyToSpy)
+                # 异步请求网页内容
+                # async with session.get(eleWeb, proxy=strProxyToSpy, timeout=intRequestTimeout, headers=dictHeader) as res:
+                #     if res.status == 200:
+                #         strhtml = await res.text()
+                #         soup = BeautifulSoup(strhtml, 'lxml')
+                #         aFromWeb = soup.select('a')
+                #         for eleA in aFromWeb:
+                #             objAddPage.AddToDB(eleA.get('href'))
+                #         arrWebP=soup.select('p')
+                #         objAddPage.AddPContent(arrWebP)
+                #         # print(result)
+                #     bolRetry = False
+                #     # print("  After " + str(intTryTime) +
+                #     #       " time, success reach " + eleWeb)
 
-            # 添加 JS 渲染方法
-            options = Options()
+                # 添加 JS 渲染方法
+                options = Options()
 
-            prefs = {'profile.default_content_setting_values': {
-                'notifications': 2}}
-            options.add_experimental_option('prefs', prefs)
-            options.add_argument('--no-sandbox')
-            options.add_argument('--disable-gpu')
-            options.add_argument('--hide-scrollbars')
-            options.add_argument('blink-settings=imagesEnabled=false')
-            options.add_argument('--headless')
-            options.add_argument('--incognito')
-            options.add_argument('--ignore-certificate-errors')
-            options.add_argument('--disable-software-rasterizer')
-            options.add_argument('--disable-extensions')
-            options.add_argument(
-                '--user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36"')
-            options.add_argument('--window-size=1280x1024')
-            options.add_argument('--start-maximized')
-            options.add_argument('--disable-infobars')
+                prefs = {'profile.default_content_setting_values': {
+                    'notifications': 2}}
+                options.add_experimental_option('prefs', prefs)
+                options.add_argument('--no-sandbox')
+                options.add_argument('--disable-gpu')
+                options.add_argument('--hide-scrollbars')
+                options.add_argument('blink-settings=imagesEnabled=false')
+                options.add_argument('--headless')
+                options.add_argument('--incognito')
+                options.add_argument('--ignore-certificate-errors')
+                options.add_argument('--disable-software-rasterizer')
+                options.add_argument('--disable-extensions')
+                options.add_argument(
+                    '--user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36"')
+                options.add_argument('--window-size=1280x1024')
+                options.add_argument('--start-maximized')
+                options.add_argument('--disable-infobars')
 
-            if random.randint(0, 3) != 1:
-                # options.add_argument('--proxy-server='+strProxyToSpy)
-                pass
-            # options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36' )
-            # browser = webdriver.PhantomJS('/usr/bin/chromedriver',chrome_options = options)
-            browserChorme = webdriver.Chrome(
-                '/usr/bin/chromedriver', chrome_options=options)
-            # browser = webdriver.Chrome('C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',chrome_options = options)
-            browserChorme.set_page_load_timeout(intRequestTimeout)
-            browserChorme.set_script_timeout(intRequestTimeout)
-            browserChorme.implicitly_wait(intRequestTimeout*4.5)
-            browserChorme.get(eleWeb)
-            strhtml = browserChorme.page_source
-            if strhtml != '<html><head></head><body></body></html>':
-                time.sleep(int(intRequestTimeout*4))
+                if random.randint(0, 28) != 1:
+                    options.add_argument('--proxy-server='+strProxyToSpy)
+
+                # options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36' )
+                # browser = webdriver.PhantomJS('/usr/bin/chromedriver',chrome_options = options)
+                browserChorme = webdriver.Chrome(
+                    '/usr/bin/chromedriver', chrome_options=options)
+                # browser = webdriver.Chrome('C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',chrome_options = options)
+                browserChorme.set_page_load_timeout(intRequestTimeout)
+                browserChorme.set_script_timeout(intRequestTimeout)
+                browserChorme.implicitly_wait(intRequestTimeout*4.5)
+                browserChorme.get(eleWeb)
                 strhtml = browserChorme.page_source
+                if strhtml != '<html><head></head><body></body></html>':
+                    time.sleep(int(intRequestTimeout*4))
+                    strhtml = browserChorme.page_source
+                    browserChorme.close()
+                    browserChorme.quit()
+                    # input=browser.find_element_by_class_name('zu-top-question')
+                    # print(input)
+                    soup = BeautifulSoup(strhtml, 'lxml')
+                    aFromWeb = soup.select('a')
+                    for eleA in aFromWeb:
+                        objAddPage.AddToDB(eleA.get('href'), eleWeb)
+                    arrWebP = soup.select(strInTag)
+                    intJudEmo=objLearn.JudContent(arrWebP)
+                    objAddPage.AddPContent(arrWebP, eleWeb,intJudEmo)
+                    # print(result)
+                    bolRetry = False
+                    # print("  After " + str(intTryTime) +
+                    #     " time, success reach " + eleWeb)
+                else:
+                    intTryTime += 8
+                    browserChorme.close()
+                    browserChorme.quit()
+                    # print('    Fail ' + str(intTryTime) + ' time')
+            except Exception as e:
+                intTryTime += 1
                 browserChorme.close()
                 browserChorme.quit()
-                # input=browser.find_element_by_class_name('zu-top-question')
-                # print(input)
-                soup = BeautifulSoup(strhtml, 'lxml')
-                aFromWeb = soup.select('a')
-                for eleA in aFromWeb:
-                    objAddPage.AddToDB(eleA.get('href'), eleWeb)
-                arrWebP = soup.select(strInTag)
-                intJudEmo=objLearn.JudContent(arrWebP)
-                objAddPage.AddPContent(arrWebP, eleWeb,intJudEmo)
-                # print(result)
-                bolRetry = False
-                # print("  After " + str(intTryTime) +
-                #     " time, success reach " + eleWeb)
-            else:
-                intTryTime += 8
-                browserChorme.close()
-                browserChorme.quit()
-                # print('    Fail ' + str(intTryTime) + ' time')
-        except Exception as e:
-            intTryTime += 1
-            browserChorme.close()
-            browserChorme.quit()
-            print(" Get method error : " + str(e))
-            print('    Fail ' + str(intTryTime) + ' time')
+                print(" Get method error : " + str(e))
+                print('    Fail ' + str(intTryTime) + ' time')
     # except Exception as e:
     #     print(" Session error : " + str(e))
-    # except Exception as e:
-    #     print(' Error of MongoDB at "funSpyWeb" ' +
-    #           time.strftime('%Y-%m-%d %H:%M:%S'))
+    except Exception as e:
+        print(' Error of MongoDB at "funSpyWeb" ' +
+              time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
 if __name__ == "__main__":

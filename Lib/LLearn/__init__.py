@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-29 00:28:53
+@LastEditTime: 2020-04-29 00:30:21
 '''
 import joblib
 import jieba
@@ -60,8 +60,8 @@ class claLearn(object):
                     self.objMongoDB.InsertOne('clfdb-kw', {'date': dateNow,'kw':eleKW,'e':intEmo,'num':1})
                 else:
                     self.objMongoDB.UpdateOneData('clfdb-kw', {'date': dateNow,'kw':eleKW,'e':intEmo}, {'num': objWordNum['num']+1})
-            print("你更新了 " + str( intTmpCount)+" 个词！")
+            # print("你更新了 " + str( intTmpCount)+" 个词！")
         
-        print("完事了")
+        # print("完事了")
 
         return intEmo
