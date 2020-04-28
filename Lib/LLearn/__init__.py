@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-29 00:20:16
+@LastEditTime: 2020-04-29 00:23:29
 '''
 import joblib
 import jieba
@@ -50,12 +50,17 @@ class claLearn(object):
         intTmpCount=0
         if bolNotUseless:
             print("有一个神奇的情绪产生了")
-            print(self.clfLatestClf.predict([arrKWToClf]))
+            print(self.clfLatestClf.predict([arrKWToClf])[0])
             intEmo=self.clfLatestClf.predict([arrKWToClf])[0]
             for eleKW in arrContentKW:
                 intTmpCount+=1
                 strNow = datetime.datetime.now().strftime("%Y/%m/%d")
                 dateNow=parser.parse(strNow)
+
+                print(dateNow)
+                print(eleKW)
+                print(intEmo)
+
                 objWordNum=self.objMongoDB.LoadOne('clfdb-kw', {'date': dateNow,'kw':eleKW,'e':intEmo})
                 if objWordNum is None:
                     self.objMongoDB.InsertOne('clfdb-kw', {'date': dateNow,'kw':eleKW,'e':intEmo,'num':1})
