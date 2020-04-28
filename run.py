@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-28 23:47:27
+@LastEditTime: 2020-04-28 23:50:17
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -220,7 +220,7 @@ def funSpyWeb(eleWeb, strInTag):
             options.add_argument('--start-maximized')
             options.add_argument('--disable-infobars')
 
-            if random.randint(0, 30) != 28:
+            if random.randint(0, 10) != 8:
                 options.add_argument('--proxy-server='+strProxyToSpy)
             # options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36' )
             # browser = webdriver.PhantomJS('/usr/bin/chromedriver',chrome_options = options)
