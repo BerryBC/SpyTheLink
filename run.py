@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-28 23:44:13
+@LastEditTime: 2020-04-28 23:47:27
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -259,8 +259,8 @@ def funSpyWeb(eleWeb, strInTag):
             intTryTime += 1
             browserChorme.close()
             browserChorme.quit()
-            # print(" Get method error : " + str(e))
-            # print('    Fail ' + str(intTryTime) + ' time')
+            print(" Get method error : " + str(e))
+            print('    Fail ' + str(intTryTime) + ' time')
     # except Exception as e:
     #     print(" Session error : " + str(e))
     # except Exception as e:
