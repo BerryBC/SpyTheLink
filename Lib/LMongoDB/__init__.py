@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-28 23:10:40
+@LastEditTime: 2020-04-28 23:23:46
 '''
 
 from configobj import ConfigObj
@@ -139,4 +139,4 @@ class claMongoDB(object):
             self.dbInside[strEleDB]=dbMongo[self.objConfig[strEleDB]['table']]
     
     def LoadOneBySort(self, strTbCfgSet, dictFilter,arrSort):
-        return self.GetTable(strTbCfgSet).find(dictFilter).sort(arrSort).limit(1)
+        return self.GetTable(strTbCfgSet).find_one(dictFilter,sort=arrSort)
