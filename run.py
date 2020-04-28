@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-28 23:36:14
+@LastEditTime: 2020-04-28 23:39:46
 '''
 
 from Lib.LMongoDB import claMongoDB

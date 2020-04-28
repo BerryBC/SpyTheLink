@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-28 23:30:28
+@LastEditTime: 2020-04-28 23:39:38
 '''
 import joblib
 import jieba
@@ -54,7 +54,7 @@ class claLearn(object):
                 intTmpCount+=1
                 strNow = datetime.datetime.now().strftime("%Y/%m/%d")
                 dateNow=parser.parse(strNow)
-                objWordNum=self.objMongoDB.InsertOne('clfdb-kw', {'date': dateNow,'kw':eleKW,'e':intEmo})
+                objWordNum=self.objMongoDB.LoadOne('clfdb-kw', {'date': dateNow,'kw':eleKW,'e':intEmo})
                 if objWordNum is None:
                     self.objMongoDB.InsertOne('clfdb-kw', {'date': dateNow,'kw':eleKW,'e':intEmo,'num':1})
                 else:
