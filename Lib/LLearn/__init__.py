@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-29 00:25:42
+@LastEditTime: 2020-04-29 00:26:50
 '''
 import joblib
 import jieba
@@ -51,7 +51,7 @@ class claLearn(object):
         if bolNotUseless:
             print("有一个神奇的情绪产生了")
             print(self.clfLatestClf.predict([arrKWToClf])[0])
-            intEmo=self.clfLatestClf.predict([arrKWToClf])[0]
+            intEmo=int( self.clfLatestClf.predict([arrKWToClf])[0])
             for eleKW in arrContentKW:
                 intTmpCount+=1
                 strNow = datetime.datetime.now().strftime("%Y/%m/%d")
