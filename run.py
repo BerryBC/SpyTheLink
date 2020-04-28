@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-28 23:50:17
+@LastEditTime: 2020-04-28 23:52:24
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -99,38 +99,38 @@ def funSpyReusablePage():
 
 
 def funSpyNewPage():
-    try:
-        objLinkDB.CleanMySelf()
-        print(' New begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
-        arrTarget = []
-        curRoot = objLinkDB.LoadAllData('pagedb-Custom')
-        for eleRoot in curRoot:
-            strRURL = eleRoot['rURL']
-            strTag = eleRoot['tag']
+    # try:
+    objLinkDB.CleanMySelf()
+    print(' New begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+    arrTarget = []
+    curRoot = objLinkDB.LoadAllData('pagedb-Custom')
+    for eleRoot in curRoot:
+        strRURL = eleRoot['rURL']
+        strTag = eleRoot['tag']
 
-            curTarget = objLinkDB.LoadRandomLimit(
-                'pagedb-Crawled', {'url': {'$regex': strRURL, '$options': "i"}, "ced": False}, intHowManyPageOneTime)
-            for eleTarget in curTarget:
-                objLinkDB.UpdateOneData(
-                    'pagedb-Crawled', {'_id': eleTarget['_id']}, {'ced': True})
-                # arrTarget.append(eleTarget['url'])
-                funSpyWeb(eleTarget['url'], strTag)
-            # print(arrTarget)
+        curTarget = objLinkDB.LoadRandomLimit(
+            'pagedb-Crawled', {'url': {'$regex': strRURL, '$options': "i"}, "ced": False}, intHowManyPageOneTime)
+        for eleTarget in curTarget:
+            objLinkDB.UpdateOneData(
+                'pagedb-Crawled', {'_id': eleTarget['_id']}, {'ced': True})
+            # arrTarget.append(eleTarget['url'])
+            funSpyWeb(eleTarget['url'], strTag)
+        # print(arrTarget)
 
-        # 异步
-        # loop = asyncio.new_event_loop()
-        # asyncio.set_event_loop(loop)
-        # semaphore = asyncio.Semaphore(intSemaphore)
-        # waittask = asyncio.gather(
-        #     *([funSpyWeb(strWebSite, semaphore) for strWebSite in arrTarget]))
-        # loop.run_until_complete(waittask)
-        # loop.close()
-        # for eleTarget in arrTarget:
-        #     funSpyWeb(eleTarget)
+    # 异步
+    # loop = asyncio.new_event_loop()
+    # asyncio.set_event_loop(loop)
+    # semaphore = asyncio.Semaphore(intSemaphore)
+    # waittask = asyncio.gather(
+    #     *([funSpyWeb(strWebSite, semaphore) for strWebSite in arrTarget]))
+    # loop.run_until_complete(waittask)
+    # loop.close()
+    # for eleTarget in arrTarget:
+    #     funSpyWeb(eleTarget)
 
-    except Exception as e:
-        print(' Error of MongoDB at "funSpyNewPage" ' +
-              time.strftime('%Y-%m-%d %H:%M:%S'))
+    # except Exception as e:
+    #     print(' Error of MongoDB at "funSpyNewPage" ' +
+    #           time.strftime('%Y-%m-%d %H:%M:%S'))
 
     # threading.Timer(60*intNewRepeatTime, funSpyNewPage).start()
     print(' New end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
@@ -251,7 +251,7 @@ def funSpyWeb(eleWeb, strInTag):
                 # print("  After " + str(intTryTime) +
                 #     " time, success reach " + eleWeb)
             else:
-                intTryTime += 1
+                intTryTime += 8
                 browserChorme.close()
                 browserChorme.quit()
                 # print('    Fail ' + str(intTryTime) + ' time')
