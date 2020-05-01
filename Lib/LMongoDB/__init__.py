@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-28 23:23:46
+@LastEditTime: 2020-05-01 15:24:05
 '''
 
 from configobj import ConfigObj
@@ -21,7 +21,7 @@ class claMongoDB(object):
     def __init__(self, strCfgPath, strDBField):
         # strCfgPath will be '../../cfg/dbCfg.ini'
         # strDBField will be 'mongodb'
-        self.strDBConf=strDBField
+        self.strDBConf = strDBField
         self.objConfig = ConfigObj(strCfgPath)
         self.strDBPW = self.objConfig[strDBField]['passwork']
         self.strDBUser = self.objConfig[strDBField]['user']
@@ -30,14 +30,15 @@ class claMongoDB(object):
         self.strDBHost = self.objConfig[strDBField]['hosts']
         self.dbClient = pymongo.MongoClient(
             'mongodb://'+self.strDBHost+':'+self.strPort+'/')
-        strDBList=self.objConfig[self.strDBConf]['dbin']
-        self.dbInside={}
-        arrDBList=strDBList.split(',')
+        strDBList = self.objConfig[self.strDBConf]['dbin']
+        self.dbInside = {}
+        arrDBList = strDBList.split(',')
         for strEleDB in arrDBList:
-            dbMongo=self.dbClient[self.objConfig[strEleDB]['database']]
-            dbMongo.authenticate(self.objConfig[strEleDB]['user'], self.objConfig[strEleDB]['passwork'])
-            self.dbInside[strEleDB]=dbMongo[self.objConfig[strEleDB]['table']]
-        
+            dbMongo = self.dbClient[self.objConfig[strEleDB]['database']]
+            dbMongo.authenticate(
+                self.objConfig[strEleDB]['user'], self.objConfig[strEleDB]['passwork'])
+            self.dbInside[strEleDB] = dbMongo[self.objConfig[strEleDB]['table']]
+
         # dbMongo = self.dbClient[self.strDBName]
         # dbMongo.authenticate(self.strDBUser, self.strDBPW)
 
@@ -114,7 +115,7 @@ class claMongoDB(object):
         return self.GetTable(strTbCfgSet).delete_many(dictFilter)
 
     def InsertOneWithID(self, strTbCfgSet, dictInsert):
-        objIed=self.GetTable(strTbCfgSet).insert_one(dictInsert)
+        objIed = self.GetTable(strTbCfgSet).insert_one(dictInsert)
         return objIed.inserted_id
 
     def InsertOne(self, strTbCfgSet, dictInsert):
@@ -130,13 +131,14 @@ class claMongoDB(object):
         self.dbClient.close()
         self.dbClient = pymongo.MongoClient(
             'mongodb://'+self.strDBHost+':'+self.strPort+'/')
-        strDBList=self.objConfig[self.strDBConf]['dbin']
-        self.dbInside={}
-        arrDBList=strDBList.split(',')
+        strDBList = self.objConfig[self.strDBConf]['dbin']
+        self.dbInside = {}
+        arrDBList = strDBList.split(',')
         for strEleDB in arrDBList:
-            dbMongo=self.dbClient[self.objConfig[strEleDB]['database']]
-            dbMongo.authenticate(self.objConfig[strEleDB]['user'], self.objConfig[strEleDB]['passwork'])
-            self.dbInside[strEleDB]=dbMongo[self.objConfig[strEleDB]['table']]
-    
-    def LoadOneBySort(self, strTbCfgSet, dictFilter,arrSort):
-        return self.GetTable(strTbCfgSet).find_one(dictFilter,sort=arrSort)
+            dbMongo = self.dbClient[self.objConfig[strEleDB]['database']]
+            dbMongo.authenticate(
+                self.objConfig[strEleDB]['user'], self.objConfig[strEleDB]['passwork'])
+            self.dbInside[strEleDB] = dbMongo[self.objConfig[strEleDB]['table']]
+
+    def LoadOneBySort(self, strTbCfgSet, dictFilter, arrSort):
+        return self.GetTable(strTbCfgSet).find_one(dictFilter, sort=arrSort)

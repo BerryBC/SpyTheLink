@@ -4,12 +4,12 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-04-29 00:35:32
+@LastEditTime: 2020-05-01 16:00:59
 '''
 
 from Lib.LMongoDB import claMongoDB
 from Lib.LAddPage import claAddPage
-from Lib.LLearn import  claLearn
+from Lib.LLearn import claLearn
 from configobj import ConfigObj
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -22,42 +22,65 @@ import time
 import random
 
 strCfgPath = './cfg/dbCfg.ini'
-objLinkDB = claMongoDB(strCfgPath, 'mongodb')
-objAddPage = claAddPage(objLinkDB)
-objLearn=claLearn(objLinkDB)
 objParam = ConfigObj(strCfgPath)
 intHowManyProxy = int(objParam['param']['HowManyProxy'])
 intHowManyPageOneTime = int(objParam['param']['HowManyPageOneTime'])
 intLessThenFail = int(objParam['param']['LessThenFail'])
 intRequestTimeout = int(objParam['param']['RequestTimeout'])
 intSemaphore = int(objParam['param']['Semaphore'])
+
 intDeleteTime = int(objParam['param']['DeleteTime'])
 intReusableRepeatTime = int(objParam['param']['ReusableRepeatTime'])
 intNewRepeatTime = int(objParam['param']['NewRepeatTime'])
 intDeleteRepeatTime = int(objParam['param']['DeleteRepeatTime'])
 intReusableFreq = int(objParam['param']['ReusableFreq'])
 intDeletFreq = int(objParam['param']['DeletFreq'])
+intCreatClfFreq = int(objParam['param']['CreatFreq'])
+
+strDirForClf = int(objParam['param']['ClfDir'])
+
+objLinkDB = claMongoDB(strCfgPath, 'mongodb')
+objAddPage = claAddPage(objLinkDB)
+objLearn = claLearn(objLinkDB, strDirForClf)
+
 # dictHeader = {
 #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.78 Safari/537.36',
 #     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
 #     'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
 #     'cache-control': 'no-cache',
 #     'Pragma': 'no-cache'}
-dictNowRepeatTime = {'t':1}
+dictNowRepeatTime = {'t': 1}
 
 
 def funMain():
     # funSpyReusablePage()
     # funSpyNewPage()
     # funDeleteOldPage()
-    if dictNowRepeatTime['t'] % intReusableFreq == 0:
-        funSpyReusablePage()
-    elif dictNowRepeatTime['t'] % intDeletFreq == 0:
-        funDeleteOldPage()
-    else:
-        funSpyNewPage()
-    dictNowRepeatTime['t']+=1
-    funMain()
+    # if dictNowRepeatTime['t'] % intReusableFreq == 0:
+    #     funSpyReusablePage()
+    # elif dictNowRepeatTime['t'] % intDeletFreq == 0:
+    #     funDeleteOldPage()
+    # else:
+    #     funSpyNewPage()
+    # dictNowRepeatTime['t'] += 1
+    # funMain()
+
+    # 测试用暂时注释
+    # while True:
+    #     if dictNowRepeatTime['t'] % intReusableFreq == 0:
+    #         funSpyReusablePage()
+    #     elif dictNowRepeatTime['t'] % intDeletFreq == 0:
+    #         funDeleteOldPage()
+    #     elif dictNowRepeatTime['t'] % intCreatClfFreq == 0:
+    #         funCreatClf()
+    #     elif dictNowRepeatTime['t'] >= intReusableFreq*intDeletFreq:
+    #         dictNowRepeatTime['t'] = 1
+    #     else:
+    #         funSpyNewPage()
+    #     dictNowRepeatTime['t'] += 1
+
+    funCreatClf()
+        
     # threading.Thread(target=funSpyReusablePage).start()
     # threading.Thread(target=funSpyNewPage).start()
     # threading.Thread(target=funDeleteOldPage).start()
@@ -245,8 +268,8 @@ def funSpyWeb(eleWeb, strInTag):
                     for eleA in aFromWeb:
                         objAddPage.AddToDB(eleA.get('href'), eleWeb)
                     arrWebP = soup.select(strInTag)
-                    intJudEmo=objLearn.JudContent(arrWebP)
-                    objAddPage.AddPContent(arrWebP, eleWeb,intJudEmo)
+                    intJudEmo = objLearn.JudContent(arrWebP)
+                    objAddPage.AddPContent(arrWebP, eleWeb, intJudEmo)
                     # print(result)
                     bolRetry = False
                     # print("  After " + str(intTryTime) +
@@ -267,6 +290,18 @@ def funSpyWeb(eleWeb, strInTag):
     except Exception as e:
         print(' Error of MongoDB at "funSpyWeb" ' +
               time.strftime('%Y-%m-%d %H:%M:%S'))
+
+
+
+def funCreatClf():
+    try:
+        objLinkDB.CleanMySelf()
+        print(' CreatClf begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+        objLearn.CreatNewClf()
+    except Exception as e:
+        print(' Error of MongoDB at "funCreatClf" ' +
+              time.strftime('%Y-%m-%d %H:%M:%S'))
+    print(' CreatClf end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
 if __name__ == "__main__":

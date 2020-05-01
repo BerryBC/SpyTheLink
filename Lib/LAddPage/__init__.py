@@ -46,7 +46,7 @@ class claAddPage(object):
                     self.objMongoDB.InsertOne('pagedb-Crawled', dictNewPage)
                     # print(strCleanURL)
 
-    def AddPContent(self, arrTagP, strInCurURL,intEmo):
+    def AddPContent(self, arrTagP, strInCurURL, intEmo):
         # print('   成功爬了一个网站')
         strPContent = ''
         for eleP in arrTagP:
