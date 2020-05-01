@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-01 15:51:56
+@LastEditTime: 2020-05-01 16:16:21
 '''
 import joblib
 import jieba
@@ -23,8 +23,8 @@ class claLearn(object):
 
     def __init__(self, objMongoDB, strDirForClf):
         self.objMongoDB = objMongoDB
-        self.LoadLatestClf()
         self.strDirForClf = strDirForClf
+        self.LoadLatestClf()
 
     def LoadLatestClf(self):
         self.objLatestClfCfg = self.objMongoDB.LoadOneBySort('clfdb', {}, [
@@ -34,12 +34,16 @@ class claLearn(object):
         self.clfLatestClf = joblib.load(
             self.strDirForClf+self.objLatestClfCfg['clfFileName'])
 
-    def JudContent(self, arrP):
+    def JudContent(self, arrP,bolIsJustText):
         bolNotUseless = False
         intEmo = 0
         strPContent = ''
-        for eleP in arrP:
-            strPContent += eleP.get_text().strip()+'\n'
+        if bolIsJustText:
+            for eleP in arrP:
+                strPContent += eleP.strip()+'\n'
+        else:
+            for eleP in arrP:
+                strPContent += eleP.get_text().strip()+'\n'
 
         genSampleWord = jieba.cut(strPContent, cut_all=False)
         arrContentKW = []
