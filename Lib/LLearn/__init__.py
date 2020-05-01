@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-01 16:50:10
+@LastEditTime: 2020-05-01 23:24:09
 '''
 import joblib
 import jieba
@@ -247,3 +247,4 @@ class claLearn(object):
                     'kwlist': nparrKWWaitFor.tolist(), 'lt': dateNow}
         self.objMongoDB.InsertOne('clfdb', dictData)
         clfBagging = None
+        self.LoadLatestClf()
