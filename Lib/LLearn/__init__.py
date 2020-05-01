@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-01 16:16:21
+@LastEditTime: 2020-05-01 16:24:58
 '''
 import joblib
 import jieba
@@ -83,7 +83,7 @@ class claLearn(object):
 
         return intEmo
 
-    def CreatNewClf(self, arrP):
+    def CreatNewClf(self):
         print('Start Load Sample')
         curPos = self.objMongoDB.LoadRandomLimit(
             'sampledb', {'cf': True, 'e': 1}, 150)
