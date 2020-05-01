@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-01 16:24:58
+@LastEditTime: 2020-05-01 16:50:10
 '''
 import joblib
 import jieba
@@ -84,7 +84,7 @@ class claLearn(object):
         return intEmo
 
     def CreatNewClf(self):
-        print('Start Load Sample')
+        # print('Start Load Sample')
         curPos = self.objMongoDB.LoadRandomLimit(
             'sampledb', {'cf': True, 'e': 1}, 150)
         curUseless = self.objMongoDB.LoadRandomLimit(
@@ -147,17 +147,17 @@ class claLearn(object):
             return dictInAllResult
 
         # 处理信息
-        print('Split The Sample')
+        # print('Split The Sample')
         dictAllResult = ToGrepSampleKW(curPos, dictAllResult)
         dictAllResult = ToGrepSampleKW(curUseless, dictAllResult)
         dictAllResult = ToGrepSampleKW(curNeg, dictAllResult)
-        print('Done Man Judgmented '+time.strftime('%Y-%m-%d %H:%M:%S'))
+        # print('Done Man Judgmented '+time.strftime('%Y-%m-%d %H:%M:%S'))
         dictAllResult = ToGrepSampleKW(curMLPos, dictAllResult)
         dictAllResult = ToGrepSampleKW(curMLUseless, dictAllResult)
         dictAllResult = ToGrepSampleKW(curMLNeg, dictAllResult)
-        print('Done Machine Judgmented '+time.strftime('%Y-%m-%d %H:%M:%S'))
+        # print('Done Machine Judgmented '+time.strftime('%Y-%m-%d %H:%M:%S'))
         dictAllResult = ToArraySample(dictAllResult)
-        print('Done Arr '+time.strftime('%Y-%m-%d %H:%M:%S'))
+        # print('Done Arr '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
         curPos.close()
         curUseless.close()
@@ -187,7 +187,7 @@ class claLearn(object):
         arrKWForEntropy = []
 
         # 获得样本各关键字信息熵
-        print('Get Samples Entropy')
+        # print('Get Samples Entropy')
         for intI in range(dictAllResult['intIndexNow']):
             arrTmp = [arrXPreTrain[intJ][intI]
                       for intJ in range(intLenOfXPreT)]
@@ -204,7 +204,7 @@ class claLearn(object):
         nparrKWWaitFor = dfEntropy[dfEntropy['IEBin'] == 'L']['KW'].values
 
         # 重新对低熵关键字在样本中排序
-        print('Redim the Keyword')
+        # print('Redim the Keyword')
         arrForTrain = [[] for intI in range(len(arrXPreTrain))]
         for nparrEle in nparrKWWaitFor:
             intJ = dictAllResult['dictKW'][nparrEle]
@@ -229,13 +229,13 @@ class claLearn(object):
                 arrYForTrainReal.append(arrYPreTrain[intI])
 
         # 开始学习
-        print('Start Learn')
+        # print('Start Learn')
         clfBagging = BaggingClassifier(base_estimator=LinearSVC(
             random_state=0, tol=1e-04, max_iter=10000))
         clfBagging.fit(arrXForTrainReal, arrYForTrainReal)
 
         # 输出信息
-        print('Output Data')
+        # print('Output Data')
         strFileName = 'svcclf'+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         strSavePath = self.strDirForClf + strFileName
         joblib.dump(

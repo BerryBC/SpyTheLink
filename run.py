@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-01 16:20:45
+@LastEditTime: 2020-05-01 16:48:32
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -66,20 +66,18 @@ def funMain():
     # funMain()
 
     # 测试用暂时注释
-    # while True:
-    #     if dictNowRepeatTime['t'] % intReusableFreq == 0:
-    #         funSpyReusablePage()
-    #     elif dictNowRepeatTime['t'] % intDeletFreq == 0:
-    #         funDeleteOldPage()
-    #     elif dictNowRepeatTime['t'] % intCreatClfFreq == 0:
-    #         funCreatClf()
-    #     elif dictNowRepeatTime['t'] >= intReusableFreq*intDeletFreq:
-    #         dictNowRepeatTime['t'] = 1
-    #     else:
-    #         funSpyNewPage()
-    #     dictNowRepeatTime['t'] += 1
-
-    funCreatClf()
+    while True:
+        if dictNowRepeatTime['t'] % intReusableFreq == 0:
+            funSpyReusablePage()
+        elif dictNowRepeatTime['t'] % intDeletFreq == 0:
+            funDeleteOldPage()
+        elif dictNowRepeatTime['t'] % intCreatClfFreq == 0:
+            funCreatClf()
+        elif dictNowRepeatTime['t'] >= intReusableFreq*intDeletFreq*intCreatClfFreq:
+            dictNowRepeatTime['t'] = 1
+        else:
+            funSpyNewPage()
+        dictNowRepeatTime['t'] += 1
         
     # threading.Thread(target=funSpyReusablePage).start()
     # threading.Thread(target=funSpyNewPage).start()
@@ -294,14 +292,14 @@ def funSpyWeb(eleWeb, strInTag):
 
 
 def funCreatClf():
-    # try:
-    objLinkDB.CleanMySelf()
-    print(' CreatClf begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
-    objLearn.CreatNewClf()
-    # except Exception as e:
-    #     print(' Error of MongoDB at "funCreatClf" ' +
-    #           time.strftime('%Y-%m-%d %H:%M:%S'))
-    # print(' CreatClf end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+    try:
+        objLinkDB.CleanMySelf()
+        print(' CreatClf begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+        objLearn.CreatNewClf()
+    except Exception as e:
+        print(' Error of MongoDB at "funCreatClf" ' +
+              time.strftime('%Y-%m-%d %H:%M:%S'))
+    print(' CreatClf end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
 if __name__ == "__main__":
