@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-01 16:00:59
+@LastEditTime: 2020-05-01 16:10:28
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -37,7 +37,7 @@ intReusableFreq = int(objParam['param']['ReusableFreq'])
 intDeletFreq = int(objParam['param']['DeletFreq'])
 intCreatClfFreq = int(objParam['param']['CreatFreq'])
 
-strDirForClf = int(objParam['param']['ClfDir'])
+strDirForClf = objParam['param']['ClfDir']
 
 objLinkDB = claMongoDB(strCfgPath, 'mongodb')
 objAddPage = claAddPage(objLinkDB)
