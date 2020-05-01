@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-01 16:15:03
+@LastEditTime: 2020-05-01 16:20:45
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -294,14 +294,14 @@ def funSpyWeb(eleWeb, strInTag):
 
 
 def funCreatClf():
-    try:
-        objLinkDB.CleanMySelf()
-        print(' CreatClf begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
-        objLearn.CreatNewClf()
-    except Exception as e:
-        print(' Error of MongoDB at "funCreatClf" ' +
-              time.strftime('%Y-%m-%d %H:%M:%S'))
-    print(' CreatClf end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+    # try:
+    objLinkDB.CleanMySelf()
+    print(' CreatClf begin : '+time.strftime('%Y-%m-%d %H:%M:%S'))
+    objLearn.CreatNewClf()
+    # except Exception as e:
+    #     print(' Error of MongoDB at "funCreatClf" ' +
+    #           time.strftime('%Y-%m-%d %H:%M:%S'))
+    # print(' CreatClf end : '+time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
 if __name__ == "__main__":
