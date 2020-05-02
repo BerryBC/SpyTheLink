@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-01 23:24:09
+@LastEditTime: 2020-05-02 09:54:21
 '''
 import joblib
 import jieba
@@ -30,7 +30,7 @@ class claLearn(object):
         self.objLatestClfCfg = self.objMongoDB.LoadOneBySort('clfdb', {}, [
                                                              ('lt', -1)])
         self.clfLatestClf = BaggingClassifier(
-            base_estimator=LinearSVC(random_state=0, tol=1e-05, max_iter=10000))
+            base_estimator=LinearSVC(random_state=0, tol=1e-03, max_iter=1000))
         self.clfLatestClf = joblib.load(
             self.strDirForClf+self.objLatestClfCfg['clfFileName'])
 
@@ -231,7 +231,7 @@ class claLearn(object):
         # 开始学习
         # print('Start Learn')
         clfBagging = BaggingClassifier(base_estimator=LinearSVC(
-            random_state=0, tol=1e-04, max_iter=10000))
+            random_state=0, tol=1e-03, max_iter=1000))
         clfBagging.fit(arrXForTrainReal, arrYForTrainReal)
 
         # 输出信息
