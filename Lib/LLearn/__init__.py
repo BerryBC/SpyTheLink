@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-02 09:57:31
+@LastEditTime: 2020-05-02 10:18:33
 '''
 import joblib
 import jieba
@@ -86,18 +86,18 @@ class claLearn(object):
     def CreatNewClf(self):
         # print('Start Load Sample')
         curPos = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': True, 'e': 1}, 300)
+            'sampledb', {'cf': True, 'e': 1}, 150)
         curUseless = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': True, 'e': 0}, 200)
+            'sampledb', {'cf': True, 'e': 0}, 100)
         curNeg = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': True, 'e': -1}, 300)
+            'sampledb', {'cf': True, 'e': -1}, 150)
 
         curMLPos = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': False, 'jed': True, 'e': 1}, 200)
+            'sampledb', {'cf': False, 'jed': True, 'e': 1}, 150)
         curMLUseless = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': False, 'jed': True, 'e': 0}, 10)
+            'sampledb', {'cf': False, 'jed': True, 'e': 0}, 100)
         curMLNeg = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': False, 'jed': True, 'e': -1}, 200)
+            'sampledb', {'cf': False, 'jed': True, 'e': -1}, 150)
 
         # 初始化定义
         dictKW = {}
