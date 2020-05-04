@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-02 10:21:20
+@LastEditTime: 2020-05-04 18:01:14
 '''
 import joblib
 import jieba
@@ -86,11 +86,11 @@ class claLearn(object):
     def CreatNewClf(self):
         # print('Start Load Sample')
         curPos = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': True, 'e': 1}, 200)
+            'sampledb', {'cf': True, 'e': 1}, 150)
         curUseless = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': True, 'e': 0}, 100)
+            'sampledb', {'cf': True, 'e': 0}, 50)
         curNeg = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': True, 'e': -1}, 200)
+            'sampledb', {'cf': True, 'e': -1}, 150)
 
         curMLPos = self.objMongoDB.LoadRandomLimit(
             'sampledb', {'cf': False, 'jed': True, 'e': 1}, 150)
