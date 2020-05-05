@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-05 13:37:17
+@LastEditTime: 2020-05-05 22:34:47
 '''
 import joblib
 import jieba
@@ -65,25 +65,29 @@ class claLearn(object):
         if bolNotUseless:
             # print("有一个神奇的情绪产生了")
             intEmo = int(self.clfLatestClf.predict([arrKWToClf])[0])
-            for eleKW in arrContentKW:
-                intTmpCount += 1
-                strNow = datetime.datetime.now().strftime("%Y/%m/%d")
-                # dateNow = parser.parse(strNow)
-                # objWordNum = self.objMongoDB.LoadOne(
-                #     'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo})
-                objWordNum = self.objMongoDB.LoadOne(
-                    'clfdb-kw', {'kw': eleKW, 'e': intEmo})
-                if objWordNum is None:
-                    # self.objMongoDB.InsertOne(
-                    #     'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo, 'num': 1})
-                    self.objMongoDB.InsertOne(
-                        'clfdb-kw', {'kw': eleKW, 'e': intEmo, 'num': 1})
-                else:
-                    # self.objMongoDB.UpdateOneData(
-                    #     'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo}, {'num': objWordNum['num']+1})
-                    self.objMongoDB.UpdateOneData(
-                        'clfdb-kw', {'kw': eleKW, 'e': intEmo}, {'num': objWordNum['num']+1})
-            # print("你更新了 " + str( intTmpCount)+" 个词！")
+        for eleKW in arrContentKW:
+            intTmpCount += 1
+            strNow = datetime.datetime.now().strftime("%Y/%m/%d")
+            # dateNow = parser.parse(strNow)
+            # objWordNum = self.objMongoDB.LoadOne(
+            #     'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo})
+            objWordNum = self.objMongoDB.LoadOne(
+                'clfdb-kw', {'kw': eleKW})
+            if objWordNum is None:
+                # self.objMongoDB.InsertOne(
+                #     'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo, 'num': 1})
+                arrEmoNum = [0, 0, 0]
+                arrEmoNum[intEmo+1] = 1
+                self.objMongoDB.InsertOne(
+                    'clfdb-kw', {'kw': eleKW, 'num': arrEmoNum})
+            else:
+                # self.objMongoDB.UpdateOneData(
+                #     'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo}, {'num': objWordNum['num']+1})
+                arrEmoNum = objWordNum['num']
+                arrEmoNum[intEmo+1] = arrEmoNum[intEmo+1]+1
+                self.objMongoDB.UpdateOneData(
+                    'clfdb-kw', {'kw': eleKW}, {'num': arrEmoNum})
+        # print("你更新了 " + str( intTmpCount)+" 个词！")
 
         # print("完事了")
 
