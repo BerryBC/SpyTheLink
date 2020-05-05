@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-04 18:01:14
+@LastEditTime: 2020-05-05 13:37:17
 '''
 import joblib
 import jieba
@@ -34,7 +34,7 @@ class claLearn(object):
         self.clfLatestClf = joblib.load(
             self.strDirForClf+self.objLatestClfCfg['clfFileName'])
 
-    def JudContent(self, arrP,bolIsJustText):
+    def JudContent(self, arrP, bolIsJustText):
         bolNotUseless = False
         intEmo = 0
         strPContent = ''
@@ -68,15 +68,21 @@ class claLearn(object):
             for eleKW in arrContentKW:
                 intTmpCount += 1
                 strNow = datetime.datetime.now().strftime("%Y/%m/%d")
-                dateNow = parser.parse(strNow)
+                # dateNow = parser.parse(strNow)
+                # objWordNum = self.objMongoDB.LoadOne(
+                #     'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo})
                 objWordNum = self.objMongoDB.LoadOne(
-                    'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo})
+                    'clfdb-kw', {'kw': eleKW, 'e': intEmo})
                 if objWordNum is None:
+                    # self.objMongoDB.InsertOne(
+                    #     'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo, 'num': 1})
                     self.objMongoDB.InsertOne(
-                        'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo, 'num': 1})
+                        'clfdb-kw', {'kw': eleKW, 'e': intEmo, 'num': 1})
                 else:
+                    # self.objMongoDB.UpdateOneData(
+                    #     'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo}, {'num': objWordNum['num']+1})
                     self.objMongoDB.UpdateOneData(
-                        'clfdb-kw', {'date': dateNow, 'kw': eleKW, 'e': intEmo}, {'num': objWordNum['num']+1})
+                        'clfdb-kw', {'kw': eleKW, 'e': intEmo}, {'num': objWordNum['num']+1})
             # print("你更新了 " + str( intTmpCount)+" 个词！")
 
         # print("完事了")
