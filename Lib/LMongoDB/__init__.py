@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-01 15:24:05
+@LastEditTime: 2020-05-06 16:10:42
 '''
 
 from configobj import ConfigObj
@@ -128,12 +128,17 @@ class claMongoDB(object):
         return self.GetTable(strTbCfgSet).find(dictFilter)
 
     def CleanMySelf(self):
+        strDBList = self.objConfig[self.strDBConf]['dbin']
+        arrDBList = strDBList.split(',')
+
+        for strEleDB in arrDBList:
+            self.dbInside[strEleDB].close()
         self.dbClient.close()
         self.dbClient = pymongo.MongoClient(
             'mongodb://'+self.strDBHost+':'+self.strPort+'/')
-        strDBList = self.objConfig[self.strDBConf]['dbin']
+        
         self.dbInside = {}
-        arrDBList = strDBList.split(',')
+        
         for strEleDB in arrDBList:
             dbMongo = self.dbClient[self.objConfig[strEleDB]['database']]
             dbMongo.authenticate(

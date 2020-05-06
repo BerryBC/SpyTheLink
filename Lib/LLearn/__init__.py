@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-05 22:34:47
+@LastEditTime: 2020-05-06 16:00:38
 '''
 import joblib
 import jieba
@@ -87,6 +87,7 @@ class claLearn(object):
                 arrEmoNum[intEmo+1] = arrEmoNum[intEmo+1]+1
                 self.objMongoDB.UpdateOneData(
                     'clfdb-kw', {'kw': eleKW}, {'num': arrEmoNum})
+            objWordNum.close()
         # print("你更新了 " + str( intTmpCount)+" 个词！")
 
         # print("完事了")
@@ -172,6 +173,10 @@ class claLearn(object):
         curPos.close()
         curUseless.close()
         curNeg.close()
+
+        curMLPos.close()
+        curMLUseless.close()
+        curMLNeg.close()
 
         arrXPreTrain = dictAllResult['arrXPreTrain']
         arrYPreTrain = dictAllResult['arrYPreTrain']
