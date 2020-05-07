@@ -3,11 +3,12 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-06 16:26:02
+@LastEditTime: 2020-05-07 22:55:55
 '''
 
 from configobj import ConfigObj
 import pymongo
+import gc
 
 
 class claMongoDB(object):
@@ -134,6 +135,10 @@ class claMongoDB(object):
         # for strEleDB in arrDBList:
         #     self.dbInside[strEleDB].close()
         self.dbClient.close()
+
+        del self.dbClient
+        gc.collect()
+
         self.dbClient = pymongo.MongoClient(
             'mongodb://'+self.strDBHost+':'+self.strPort+'/')
         

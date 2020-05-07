@@ -3,12 +3,13 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-06 16:41:35
+@LastEditTime: 2020-05-07 22:54:50
 '''
 import joblib
 import jieba
 import datetime
 import time
+import gc
 
 
 import pandas as pd
@@ -27,10 +28,10 @@ class claLearn(object):
         self.LoadLatestClf()
 
     def LoadLatestClf(self):
+        del self.clfLatestClf
+        gc.collect()
         self.objLatestClfCfg = self.objMongoDB.LoadOneBySort('clfdb', {}, [
                                                              ('lt', -1)])
-        self.clfLatestClf = BaggingClassifier(
-            base_estimator=LinearSVC(random_state=0, tol=1e-03, max_iter=1000))
         self.clfLatestClf = joblib.load(
             self.strDirForClf+self.objLatestClfCfg['clfFileName'])
 
@@ -91,6 +92,10 @@ class claLearn(object):
         # print("你更新了 " + str( intTmpCount)+" 个词！")
 
         # print("完事了")
+        
+        del arrContentKW
+        del clfLatestClf
+        gc.collect()
 
         return intEmo
 
@@ -263,3 +268,17 @@ class claLearn(object):
         self.objMongoDB.InsertOne('clfdb', dictData)
         clfBagging = None
         self.LoadLatestClf()
+
+        del curPos
+        del curUseless
+        del curNeg
+
+        del curMLPos
+        del curMLUseless
+        del curMLNeg
+        
+        del dictData
+        del nparrKWWaitFor
+        del clfBagging
+        
+        gc.collect()
