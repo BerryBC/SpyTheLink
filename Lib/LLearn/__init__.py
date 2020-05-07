@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-07 23:00:38
+@LastEditTime: 2020-05-08 00:20:12
 '''
 import joblib
 import jieba
@@ -95,7 +95,7 @@ class claLearn(object):
         # print("完事了")
         
         del arrContentKW
-        del clfLatestClf
+        # del clfLatestClf
         gc.collect()
 
         return intEmo
