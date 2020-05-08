@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-08 00:20:12
+@LastEditTime: 2020-05-08 22:15:46
 '''
 import joblib
 import jieba
@@ -112,7 +112,7 @@ class claLearn(object):
         curMLPos = self.objMongoDB.LoadRandomLimit(
             'sampledb', {'cf': False, 'jed': True, 'e': 1}, 150)
         curMLUseless = self.objMongoDB.LoadRandomLimit(
-            'sampledb', {'cf': False, 'jed': True, 'e': 0}, 100)
+            'sampledb', {'cf': False, 'jed': True, 'e': 0}, 50)
         curMLNeg = self.objMongoDB.LoadRandomLimit(
             'sampledb', {'cf': False, 'jed': True, 'e': -1}, 150)
 
