@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-02-02 11:21:44
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-07 22:56:39
+@LastEditTime: 2020-05-11 22:51:29
 '''
 
 from configobj import ConfigObj
@@ -131,7 +131,7 @@ class claMongoDB(object):
     def CleanMySelf(self):
         strDBList = self.objConfig[self.strDBConf]['dbin']
         arrDBList = strDBList.split(',')
-        
+
         self.dbInside = {}
         # for strEleDB in arrDBList:
         #     self.dbInside[strEleDB].close()
@@ -142,7 +142,7 @@ class claMongoDB(object):
 
         self.dbClient = pymongo.MongoClient(
             'mongodb://'+self.strDBHost+':'+self.strPort+'/')
-        
+
         for strEleDB in arrDBList:
             dbMongo = self.dbClient[self.objConfig[strEleDB]['database']]
             dbMongo.authenticate(
@@ -151,3 +151,6 @@ class claMongoDB(object):
 
     def LoadOneBySort(self, strTbCfgSet, dictFilter, arrSort):
         return self.GetTable(strTbCfgSet).find_one(dictFilter, sort=arrSort)
+
+    def LoadLimitBySort(self, strTbCfgSet, dictFilter, arrSort, intLimit):
+        return self.GetTable(strTbCfgSet).find(dictFilter, sort=arrSort).limit(intLimit)

@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-08 22:15:46
+@LastEditTime: 2020-05-11 23:20:01
 '''
 import joblib
 import jieba
@@ -28,13 +28,17 @@ class claLearn(object):
         self.LoadLatestClf()
 
     def LoadLatestClf(self):
-        self.clfLatestClf=0
+        self.clfLatestClf = 0
         del self.clfLatestClf
+        del self.objLatestClfCfg
         gc.collect()
-        self.objLatestClfCfg = self.objMongoDB.LoadOneBySort('clfdb', {}, [
-                                                             ('lt', -1)])
-        self.clfLatestClf = joblib.load(
-            self.strDirForClf+self.objLatestClfCfg['clfFileName'])
+        self.objLatestClfCfg = []
+        self.clfLatestClf = []
+        curClfCfg = self.objMongoDB.LoadOneBySort('clfdb', {}, [('lt', -1)], 3)
+        for eleCur in curClfCfg:
+            self.objLatestClfCfg.append(eleCur)
+            self.clfLatestClf.append(joblib.load(
+                self.strDirForClf+eleCur['clfFileName']))
 
     def JudContent(self, arrP, bolIsJustText):
         bolNotUseless = False
@@ -55,18 +59,28 @@ class claLearn(object):
             if not eleKW in arrContentKW:
                 arrContentKW.append(eleKW)
 
-        arrKWToClf = []
-        for eleKW in self.objLatestClfCfg["kwlist"]:
-            if eleKW in arrContentKW:
-                arrKWToClf.append(True)
-                bolNotUseless = True
-            else:
-                arrKWToClf.append(False)
+        arrEmo = []
+        for intI in range(3):
+            arrKWToClf = []
+            for eleKW in self.objLatestClfCfg[intI]["kwlist"]:
+                if eleKW in arrContentKW:
+                    arrKWToClf.append(True)
+                    bolNotUseless = True
+                else:
+                    arrKWToClf.append(False)
+            intTmpCount = 0
+            if bolNotUseless:
+                # print("有一个神奇的情绪产生了")
+                intEmo = int(self.clfLatestClf[intI].predict([arrKWToClf])[0])
+            arrEmo.append(intEmo)
 
-        intTmpCount = 0
-        if bolNotUseless:
-            # print("有一个神奇的情绪产生了")
-            intEmo = int(self.clfLatestClf.predict([arrKWToClf])[0])
+        if arrEmo[0] == arrEmo[1]:
+            intEmo = arrEmo[0]
+        elif arrEmo[0] == arrEmo[2]:
+            intEmo = arrEmo[0]
+        else:
+            intEmo = arrEmo[1]
+
         for eleKW in arrContentKW:
             intTmpCount += 1
             strNow = datetime.datetime.now().strftime("%Y/%m/%d")
@@ -93,7 +107,7 @@ class claLearn(object):
         # print("你更新了 " + str( intTmpCount)+" 个词！")
 
         # print("完事了")
-        
+
         del arrContentKW
         # del clfLatestClf
         gc.collect()
@@ -277,9 +291,9 @@ class claLearn(object):
         del curMLPos
         del curMLUseless
         del curMLNeg
-        
+
         del dictData
         del nparrKWWaitFor
         del clfBagging
-        
+
         gc.collect()
