@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-11 23:20:01
+@LastEditTime: 2020-05-11 23:37:02
 '''
 import joblib
 import jieba
@@ -29,6 +29,7 @@ class claLearn(object):
 
     def LoadLatestClf(self):
         self.clfLatestClf = 0
+        self.objLatestClfCfg = 0
         del self.clfLatestClf
         del self.objLatestClfCfg
         gc.collect()
