@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-12 00:08:33
+@LastEditTime: 2020-05-12 00:12:05
 '''
 import joblib
 import jieba
@@ -41,7 +41,7 @@ class claLearn(object):
             self.objLatestClfCfg.append(eleCur)
             self.clfLatestClf.append(joblib.load(
                 self.strDirForClf+eleCur['clfFileName']))
-            print(eleCur['clfFileName'])
+            # print(eleCur['clfFileName'])
 
     def JudContent(self, arrP, bolIsJustText):
         bolNotUseless = False
@@ -61,7 +61,7 @@ class claLearn(object):
                 # 如果前期没有该关键字即进行下一步
             if not eleKW in arrContentKW:
                 arrContentKW.append(eleKW)
-        print('开始你的表演')
+        # print('开始你的表演')
         arrEmo = []
         for intI in range(3):
             arrKWToClf = []
@@ -77,15 +77,15 @@ class claLearn(object):
                 # print("有一个神奇的情绪产生了")
                 intEmo = int(self.clfLatestClf[intI].predict([arrKWToClf])[0])
             arrEmo.append(intEmo)
-        print(intEmo)
+        # print(intEmo)
         if arrEmo[0] == arrEmo[1]:
             intEmo = arrEmo[0]
         elif arrEmo[0] == arrEmo[2]:
             intEmo = arrEmo[0]
         else:
             intEmo = arrEmo[1]
-        print(arrEmo)
-        print("中场表演")
+        # print(arrEmo)
+        # print("中场表演")
         for eleKW in arrContentKW:
             intTmpCount += 1
             strNow = datetime.datetime.now().strftime("%Y/%m/%d")
@@ -111,8 +111,8 @@ class claLearn(object):
             # objWordNum.close()
         # print("你更新了 " + str( intTmpCount)+" 个词！")
 
-        print("完事了")
-        print(intEmo)
+        # print("完事了")
+        # print(intEmo)
         del arrContentKW
         # del clfLatestClf
         gc.collect()
