@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-11 23:37:02
+@LastEditTime: 2020-05-11 23:38:56
 '''
 import joblib
 import jieba
@@ -35,7 +35,7 @@ class claLearn(object):
         gc.collect()
         self.objLatestClfCfg = []
         self.clfLatestClf = []
-        curClfCfg = self.objMongoDB.LoadOneBySort('clfdb', {}, [('lt', -1)], 3)
+        curClfCfg = self.objMongoDB.LoadLimitBySort('clfdb', {}, [('lt', -1)], 3)
         for eleCur in curClfCfg:
             self.objLatestClfCfg.append(eleCur)
             self.clfLatestClf.append(joblib.load(
