@@ -3,7 +3,7 @@
 @Author: BerryBC
 @Date: 2020-04-27 22:29:02
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-12 00:12:05
+@LastEditTime: 2020-05-17 22:42:01
 '''
 import joblib
 import jieba
@@ -42,6 +42,9 @@ class claLearn(object):
             self.clfLatestClf.append(joblib.load(
                 self.strDirForClf+eleCur['clfFileName']))
             # print(eleCur['clfFileName'])
+
+        del curClfCfg
+        gc.collect()
 
     def JudContent(self, arrP, bolIsJustText):
         bolNotUseless = False

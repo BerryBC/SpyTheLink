@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-06 16:33:39
+@LastEditTime: 2020-05-17 22:40:43
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -20,6 +20,7 @@ import aiohttp
 import threading
 import time
 import random
+import gc
 
 strCfgPath = './cfg/dbCfg.ini'
 objParam = ConfigObj(strCfgPath)
@@ -78,7 +79,7 @@ def funMain():
         else:
             funSpyNewPage()
         dictNowRepeatTime['t'] += 1
-        
+
     # threading.Thread(target=funSpyReusablePage).start()
     # threading.Thread(target=funSpyNewPage).start()
     # threading.Thread(target=funDeleteOldPage).start()
@@ -138,6 +139,9 @@ def funSpyNewPage():
             funSpyWeb(eleTarget['url'], strTag)
         # print(arrTarget)
 
+        del curTarget
+        gc.collect()
+
     # 异步
     # loop = asyncio.new_event_loop()
     # asyncio.set_event_loop(loop)
@@ -181,8 +185,8 @@ def funDeleteOldPage():
 
 def funSpyWeb(eleWeb, strInTag):
     # try:
-    intRandMin = random.randint(1, 60)/1000
-    time.sleep(intRandMin)
+    # intRandMin = random.randint(1, 60)/1000
+    # time.sleep(intRandMin)
     # async with inSemaphore:
     bolRetry = True
     intTryTime = 0
@@ -190,10 +194,12 @@ def funSpyWeb(eleWeb, strInTag):
     # for eleProxy in objLinkDB.LoadRandomLimit('proxydb', {"fail": {"$lte": intLessThenFail}},intHowManyProxy):
     #     arrProxy.append(arrProxy)
     # print(type(arrProxy))
-    arrProxy = objLinkDB.LoadRandomLimit(
+    curProxy = objLinkDB.LoadRandomLimit(
         'proxydb', {"fail": {"$lte": intLessThenFail}}, intHowManyProxy)
-    arrProxy = list(arrProxy)
+    arrProxy = list(curProxy)
     intProxyLen = len(arrProxy)
+    del curProxy
+    gc.collect()
     # print(intProxyLen)
     # try:
     #     async with aiohttp.ClientSession() as session:
@@ -266,7 +272,7 @@ def funSpyWeb(eleWeb, strInTag):
                 for eleA in aFromWeb:
                     objAddPage.AddToDB(eleA.get('href'), eleWeb)
                 arrWebP = soup.select(strInTag)
-                intJudEmo = objLearn.JudContent(arrWebP,False)
+                intJudEmo = objLearn.JudContent(arrWebP, False)
                 objAddPage.AddPContent(arrWebP, eleWeb, intJudEmo)
                 # print(result)
                 bolRetry = False
@@ -288,7 +294,6 @@ def funSpyWeb(eleWeb, strInTag):
     # except Exception as e:
     #     print(' Error of MongoDB at "funSpyWeb" ' +
     #           time.strftime('%Y-%m-%d %H:%M:%S'))
-
 
 
 def funCreatClf():
