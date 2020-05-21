@@ -4,7 +4,7 @@
 @Version: 0.3.0
 @Date: 2020-02-02 11:15:41
 @LastEditors: BerryBC
-@LastEditTime: 2020-05-17 22:40:43
+@LastEditTime: 2020-05-21 21:27:40
 '''
 
 from Lib.LMongoDB import claMongoDB
@@ -50,7 +50,7 @@ objLearn = claLearn(objLinkDB, strDirForClf)
 #     'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
 #     'cache-control': 'no-cache',
 #     'Pragma': 'no-cache'}
-dictNowRepeatTime = {'t': 1}
+dictNowRepeatTime = {'t': 28}
 
 
 def funMain():
@@ -289,6 +289,11 @@ def funSpyWeb(eleWeb, strInTag):
             browserChorme.quit()
             # print(" Get method error : " + str(e))
             # print('    Fail ' + str(intTryTime) + ' time')
+        finally:
+            options = False
+            browserChorme = False
+            del options
+            del browserChorme
     # except Exception as e:
     #     print(" Session error : " + str(e))
     # except Exception as e:
